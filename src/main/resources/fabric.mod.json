@@ -1,0 +1,32 @@
+{
+	"schemaVersion": 1,
+	"id": "permissionless-resolution-changer",
+	"version": "${version}",
+	"name": "permissionless Resolution Changer",
+	"description": "Connects to Boundless Window and changes the resolution within game.",
+	"authors": [
+		"amathew4538"
+	],
+	"contact": {
+		"homepage": "https://github.com/amathew4538/permissionless-resolution-changer",
+		"sources": "https://github.com/amathew4538/permissionless-resolution-changer"
+	},
+	"license": "AGPLv3",
+	"icon": "assets/permissionless-resolution-changer/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"amathew4538.permissionlessresolutionchanger.permissionlessResolutionChanger"
+		]
+	},
+	"mixins": [
+		"permissionless-resolution-changer.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.19.2",
+		"minecraft": "~1.16.1",
+		"java": ">=8",
+		"fabric": "*",
+		"boundlesswindow": "*"
+	}
+}
