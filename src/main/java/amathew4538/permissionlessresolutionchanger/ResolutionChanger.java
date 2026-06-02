@@ -3,6 +3,7 @@ package amathew4538.permissionlessresolutionchanger;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.stream.Collectors;
+import java.util.Collections;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.io.IOException;
@@ -97,7 +98,7 @@ public class ResolutionChanger {
                     System.out.println("- " + file.toAbsolutePath());
                     
                     try {
-                        String portStr = Files.readString(file).trim();
+                        String portStr = new String(Files.readAllBytes(file), java.nio.charset.StandardCharsets.UTF_8).trim();
                         System.out.println("Active Port: " + portStr);
                         return Integer.parseInt(portStr);
                     } catch (NumberFormatException e) {
@@ -116,7 +117,7 @@ public class ResolutionChanger {
      */
     public static List<Path> findPortFiles(Path instancesPath) throws IOException {
         if (!Files.exists(instancesPath)) {
-            return List.of();
+            return Collections.emptyList();
         }
 
         List<Path> foundFiles = new ArrayList<>();
