@@ -63,7 +63,7 @@ public class ResolutionChanger {
             ProcessBuilder screenScalePB = new ProcessBuilder("bash", "-c", screenScaleBashCommand);
             Process screenScaleProcess = screenScalePB.start();
 
-            String screenScaleOutput;
+            String screenScaleOutput = "";
             try (BufferedReader screenScaleReader = new BufferedReader(new InputStreamReader(screenScaleProcess.getInputStream()))) {
                 screenScaleOutput = screenScaleReader.lines().collect(Collectors.joining("")).trim();
             } catch (Exception e) {
