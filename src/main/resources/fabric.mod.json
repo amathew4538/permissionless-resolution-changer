@@ -2,7 +2,7 @@
 	"schemaVersion": 1,
 	"id": "permissionless-resolution-changer",
 	"version": "${version}",
-	"name": "permissionless Resolution Changer",
+	"name": "Permissionless Resolution Changer",
 	"description": "Connects to Boundless Window and changes the resolution within game.",
 	"authors": [
 		"amathew4538"
@@ -16,7 +16,7 @@
 	"environment": "*",
 	"entrypoints": {
 		"main": [
-			"amathew4538.permissionlessresolutionchanger.permissionlessResolutionChanger"
+			"amathew4538.permissionlessresolutionchanger.PermissionlessResolutionChanger"
 		]
 	},
 	"mixins": [
