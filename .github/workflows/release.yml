@@ -4,6 +4,10 @@ on: [push]
 jobs:
     release:
         runs-on: ubuntu-24.04
+
+        permissions:
+            contents: write
+
         steps:
           - name: Checkout Repository
             uses: actions/checkout@v6
@@ -53,26 +57,26 @@ jobs:
                     fi
                 fi
 
-          - name: validate gradle wrapper
+          - name: Validate Gradle Wrapper
             if: steps.version_check.outputs.changed == 'true'
             uses: gradle/actions/wrapper-validation@v6
 
-          - name: setup jdk
+          - name: Setup JDK
             if: steps.version_check.outputs.changed == 'true'
             uses: actions/setup-java@v5
             with:
                 java-version: '25'
                 distribution: 'microsoft'
 
-          - name: Make Gradle Wrapper Executable
+          - name: Setup Gradle
             if: steps.version_check.outputs.changed == 'true'
-            run: chmod +x ./gradlew
+            uses: gradle/actions/setup-gradle@v4
 
           - name: Build
             if: steps.version_check.outputs.changed == 'true'
             run: ./gradlew build
 
-          - name: Create release
+          - name: Create Release
             if: steps.version_check.outputs.changed == 'true'
             uses: softprops/action-gh-release@v2
             with:
