@@ -1,0 +1,85 @@
+name: release
+on: [push]
+
+jobs:
+    release:
+        runs-on: ubuntu-24.04
+        steps:
+          - name: Checkout Repository
+            uses: actions/checkout@v6
+            with:
+                fetch-depth: 0
+
+          - name: Check Mod Version
+            id: version_check
+            run: |
+                # Determine the base commit
+
+                BASE_COMMIT="${{ github.event.before }}"
+                if [ "$BASE_COMMIT" = "0000000000000000000000000000000000000000" ] || [ -z "$BASE_COMMIT" ]; then
+                    BASE_COMMIT="HEAD~1"
+                fi
+
+                echo "Base commit is $BASE_COMMIT"
+
+                process_version() {
+                    # Read mod_version from gradle.properties
+                    VERSION=$(grep -E "^mod_version" gradle.properties | cut -d'=' -f2 | xargs)
+                    echo "version=$VERSION" >> $GITHUB_OUTPUT
+                    echo "Found mod_version: $VERSION"
+
+                    # Check if it contains alpha, beta, rc
+                    if echo "$VERSION" | grep -iqE "alpha|beta|rc"; then
+                        echo "Detected pre-release"
+                        echo "prerelease=true" >> $GITHUB_OUTPUT
+                    else
+                        echo "Detected full release"
+                        echo "prerelease=false" >> $GITHUB_OUTPUT
+                    fi
+                }
+
+                if git diff --quiet $BASE_COMMIT HEAD -- gradle.properties; then
+                    echo "gradle.properties was not modified."
+                    echo "changed=false" >> $GITHUB_OUTPUT
+                else
+                    # Check if mod_version was changed
+                    if git diff $BASE_COMMIT HEAD -- gradle.properties | grep -E "^\+[[:space:]]*mod_version" > /dev/null; then
+                        echo "mod_version was updated"
+                        echo "changed=true" >> $GITHUB_OUTPUT
+                        process_version
+                    else
+                        echo "gradle.properties changed, but mod_version was not."
+                        echo "changed=false" >> $GITHUB_OUTPUT
+                    fi
+                fi
+
+          - name: validate gradle wrapper
+            if: steps.version_check.outputs.changed == 'true'
+            uses: gradle/actions/wrapper-validation@v6
+
+          - name: setup jdk
+            if: steps.version_check.outputs.changed == 'true'
+            uses: actions/setup-java@v5
+            with:
+                java-version: '25'
+                distribution: 'microsoft'
+
+          - name: Make Gradle Wrapper Executable
+            if: steps.version_check.outputs.changed == 'true'
+            run: chmod +x ./gradlew
+
+          - name: Build
+            if: steps.version_check.outputs.changed == 'true'
+            run: ./gradlew build
+
+          - name: Create release
+            if: steps.version_check.outputs.changed == 'true'
+            uses: softprops/action-gh-release@v2
+            with:
+                tag_name: v${{ steps.version_check.outputs.version }}
+                name: Permissionless Resolution Changer v${{ steps.version_check.outputs.version }}
+                prerelease: ${{ steps.version_check.outputs.prerelease == 'true' }}
+                draft: false
+                files: |
+                    build/libs/permissionless-resolution-changer-${{ steps.version_check.outputs.version }}.jar
+                    build/libs/permissionless-resolution-changer-${{ steps.version_check.outputs.version }}-sources.jar
