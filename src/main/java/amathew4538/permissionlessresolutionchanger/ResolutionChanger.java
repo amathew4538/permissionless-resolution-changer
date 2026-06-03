@@ -240,7 +240,7 @@ public class ResolutionChanger {
         }
     }
 
-    public static void setResolutionToThin() {
+    public static void setResolutionToWide() {
         int port = getBWPort();
         if (port == -1) {
             System.out.println("No port!");
