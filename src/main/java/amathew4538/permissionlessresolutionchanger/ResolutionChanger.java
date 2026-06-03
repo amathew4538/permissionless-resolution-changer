@@ -159,32 +159,26 @@ public class ResolutionChanger {
             return;
         }
 
-        Socket socket = null;
         try {
-            socket = new Socket("localhost", port);
+            Socket socket = new Socket("localhost", port);
 
-            try (PrintWriter out = new PrintWriter(socket.getOutputStream(), true)) {
-                out.println(String.format("set 0 0 %s %s", screenWidth, screenHeight));
-                out.flush();
-            }
+            PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+
+            out.println(String.format("set 0 0 %s %s", screenWidth, screenHeight));
+            out.flush();
 
             socket.shutdownOutput();
 
-            try (BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
-                String response;
-                while ((response = in.readLine()) != null) { }
-            }
+            String response;
+            while ((response = in.readLine()) != null) { }
+
+            in.close();
+            out.close();
+            socket.close();
 
         } catch (IOException e) {
-            System.err.println("Connection failed: " + e.getMessage());
-        } finally {
-            if (socket != null && !socket.isClosed()) {
-                try {
-                    socket.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
+            System.err.println("Connection failed safely: " + e.getMessage());
         }
     }
 
@@ -195,32 +189,25 @@ public class ResolutionChanger {
             return;
         }
 
-        Socket socket = null;
         try {
-            socket = new Socket("localhost", port);
-            
-            try (PrintWriter out = new PrintWriter(socket.getOutputStream(), true)) {
-                out.println(String.format("set - - 384 %s", getDpiFromScreenScale(screenScale)));
-                out.flush();
-            }
+            Socket socket = new Socket("localhost", port);
+            PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+
+            out.println(String.format("set - - 384 %s", getDpiFromScreenScale(screenScale)));
+            out.flush();
 
             socket.shutdownOutput();
 
-            try (BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
-                String response;
-                while ((response = in.readLine()) != null) { }
-            }
+            String response;
+            while ((response = in.readLine()) != null) { }
+
+            in.close();
+            out.close();
+            socket.close();
 
         } catch (IOException e) {
-            System.err.println("Connection failed: " + e.getMessage());
-        } finally {
-            if (socket != null && !socket.isClosed()) {
-                try {
-                    socket.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
+            System.err.println("Connection failed safely: " + e.getMessage());
         }
     }
 
@@ -231,69 +218,54 @@ public class ResolutionChanger {
             return;
         }
 
-        Socket socket = null;
         try {
-            socket = new Socket("localhost", port);
-            
-            try (PrintWriter out = new PrintWriter(socket.getOutputStream(), true)) {
-                // Assuming your thin command structure mirrors your tall structure
-                out.println(String.format("set - - %s 384", getDpiFromScreenScale(screenScale)));
-                out.flush();
-            }
+            Socket socket = new Socket("localhost", port);
+            PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+
+            out.println(String.format("set - - 384 %s", screenHeight));
+            out.flush();
 
             socket.shutdownOutput();
 
-            try (BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
-                String response;
-                while ((response = in.readLine()) != null) { }
-            }
+            String response;
+            while ((response = in.readLine()) != null) { }
+
+            in.close();
+            out.close();
+            socket.close();
 
         } catch (IOException e) {
-            System.err.println("Connection failed: " + e.getMessage());
-        } finally {
-            if (socket != null && !socket.isClosed()) {
-                try {
-                    socket.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
+            System.err.println("Connection failed safely: " + e.getMessage());
         }
     }
 
-    public static void setResolutionToWide() {
+    public static void setResolutionToThin() {
         int port = getBWPort();
         if (port == -1) {
             System.out.println("No port!");
             return;
         }
 
-        Socket socket = null;
         try {
-            socket = new Socket("localhost", port);
+            Socket socket = new Socket("localhost", port);
+            PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
-            try (PrintWriter out = new PrintWriter(socket.getOutputStream(), true)) {
-                out.println(String.format("set 0 0 %s 300", screenWidth));
-                out.flush();
-            }
+            out.println(String.format("set - - %s 300", screenWidth));
+            out.flush();
 
             socket.shutdownOutput();
 
-            try (BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
-                String response;
-                while ((response = in.readLine()) != null) { }
-            }
+            String response;
+            while ((response = in.readLine()) != null) { }
+
+            in.close();
+            out.close();
+            socket.close();
 
         } catch (IOException e) {
-            System.err.println("Connection failed: " + e.getMessage());
-        } finally {
-            if (socket != null && !socket.isClosed()) {
-                try {
-                    socket.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
+            System.err.println("Connection failed safely: " + e.getMessage());
         }
     }
 
