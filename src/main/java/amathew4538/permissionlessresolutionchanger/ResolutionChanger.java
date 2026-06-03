@@ -153,8 +153,6 @@ public class ResolutionChanger {
 
     // Resolution Setters
     public static void setResolutionToBase() {
-        InitializeScreenSettings();
-
         int port = getBWPort();
         if (port == -1) {
             System.out.println("No port!");
@@ -166,14 +164,13 @@ public class ResolutionChanger {
 
             out.flush();
             socket.shutdownOutput();
+            Thread.sleep(50);
         } catch (IOException e) {
             System.err.println("Connection failed: " + e.getMessage());
         }
     }
 
     public static void setResolutionToTall() {
-        InitializeScreenSettings();
-
         int port = getBWPort();
         if (port == -1) {
             System.out.println("No port!");
@@ -185,14 +182,13 @@ public class ResolutionChanger {
 
             out.flush();
             socket.shutdownOutput();
+            Thread.sleep(50);
         } catch (IOException e) {
             System.err.println("Connection failed: " + e.getMessage());
         }
     }
 
     public static void setResolutionToThin() {
-        InitializeScreenSettings();
-
         int port = getBWPort();
         if (port == -1) {
             System.out.println("No port!");
@@ -204,14 +200,13 @@ public class ResolutionChanger {
 
             out.flush();
             socket.shutdownOutput();
+            Thread.sleep(50);
         } catch (IOException e) {
             System.err.println("Connection failed: " + e.getMessage());
         }
     }
 
     public static void setResolutionToWide() {
-        InitializeScreenSettings();
-        
         int port = getBWPort();
         if (port == -1) {
             System.out.println("No port!");
@@ -223,6 +218,7 @@ public class ResolutionChanger {
 
             out.flush();
             socket.shutdownOutput();
+            Thread.sleep(50);
         } catch (IOException e) {
             System.err.println("Connection failed: " + e.getMessage());
         }
