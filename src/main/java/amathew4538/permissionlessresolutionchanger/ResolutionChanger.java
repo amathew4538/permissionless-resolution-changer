@@ -159,14 +159,20 @@ public class ResolutionChanger {
             return;
         }
 
-        try (Socket socket = new Socket("localhost", port); PrintWriter out = new PrintWriter(socket.getOutputStream(), true)) {
+        try (
+            Socket socket = new Socket("localhost", port);
+            PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()))
+        ) {
+
             out.println(String.format("set 0 0 %s %s", screenWidth, screenHeight));
             out.flush();
+
             socket.shutdownOutput();
-            Thread.sleep(50);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            System.err.println("Thread was interrupted: " + e.getMessage());
+
+            String response = "";
+            while ((response = in.readLine()) != null) { }
+
         } catch (IOException e) {
             System.err.println("Connection failed: " + e.getMessage());
         }
@@ -179,14 +185,19 @@ public class ResolutionChanger {
             return;
         }
 
-        try (Socket socket = new Socket("localhost", port); PrintWriter out = new PrintWriter(socket.getOutputStream(), true)) {
+        try (
+            Socket socket = new Socket("localhost", port);
+            PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()))
+        ) {
             out.println(String.format("set - - 384 %s", getDpiFromScreenScale(screenScale)));
             out.flush();
+
             socket.shutdownOutput();
-            Thread.sleep(50);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            System.err.println("Thread was interrupted: " + e.getMessage());
+
+            String response = "";
+            while ((response = in.readLine()) != null) { }
+
         } catch (IOException e) {
             System.err.println("Connection failed: " + e.getMessage());
         }
@@ -199,14 +210,19 @@ public class ResolutionChanger {
             return;
         }
 
-        try (Socket socket = new Socket("localhost", port); PrintWriter out = new PrintWriter(socket.getOutputStream(), true)) {
+        try (
+            Socket socket = new Socket("localhost", port);
+            PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()))
+        ) {
             out.println(String.format("set - - 384 %s", screenHeight));
             out.flush();
+
             socket.shutdownOutput();
-            Thread.sleep(50);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            System.err.println("Thread was interrupted: " + e.getMessage());
+
+            String response = "";
+            while ((response = in.readLine()) != null) { }
+
         } catch (IOException e) {
             System.err.println("Connection failed: " + e.getMessage());
         }
@@ -219,14 +235,19 @@ public class ResolutionChanger {
             return;
         }
 
-        try (Socket socket = new Socket("localhost", port); PrintWriter out = new PrintWriter(socket.getOutputStream(), true)) {
+        try (
+            Socket socket = new Socket("localhost", port);
+            PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()))
+        ) {
             out.println(String.format("set - - %s 300", screenWidth));
             out.flush();
+
             socket.shutdownOutput();
-            Thread.sleep(50);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            System.err.println("Thread was interrupted: " + e.getMessage());
+
+            String response = "";
+            while ((response = in.readLine()) != null) { }
+
         } catch (IOException e) {
             System.err.println("Connection failed: " + e.getMessage());
         }
