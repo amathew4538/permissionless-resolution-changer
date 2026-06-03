@@ -52,6 +52,7 @@ public class ResolutionChanger {
                 System.err.println("AppleScript execution failed with exit code: " + exitCode);
                 screenWidth = "1470";
                 screenHeight = "956";
+                System.out.println("Resolution: " + screenWidth + "x" + screenHeight);
             }
 
         } catch (Exception e) {
@@ -73,12 +74,12 @@ public class ResolutionChanger {
             int exitCode = screenScaleProcess.waitFor();
             if (exitCode == 0 && !screenScaleOutput.isEmpty()) {
                 screenScale = screenScaleOutput.trim();
-                System.out.println("screenScale: " + screenScale);
+                System.out.println("Screen Scale: " + screenScale);
             } else {
                 System.err.println("AppleScript execution failed with exit code: " + exitCode);
                 screenScale = "2.0";
+                System.out.println("Screen Scale: " + screenScale);
             }
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -138,6 +139,7 @@ public class ResolutionChanger {
             });
         }
 
+        System.out.println("Port files found");
         return foundFiles;
     }
 
