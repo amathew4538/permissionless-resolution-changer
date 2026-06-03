@@ -16,7 +16,7 @@
 	"icon": "assets/permissionless-resolution-changer/icon.png",
 	"environment": "*",
 	"entrypoints": {
-		"main": [
+		"client": [
 			"amathew4538.permissionlessresolutionchanger.PermissionlessResolutionChanger"
 		]
 	},
