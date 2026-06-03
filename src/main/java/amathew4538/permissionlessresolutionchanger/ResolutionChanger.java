@@ -153,6 +153,8 @@ public class ResolutionChanger {
 
     // Resolution Setters
     public static void setResolutionToBase() {
+        InitializeScreenSettings();
+
         int port = getBWPort();
         if (port == -1) {
             System.out.println("No port!");
@@ -170,6 +172,8 @@ public class ResolutionChanger {
     }
 
     public static void setResolutionToTall() {
+        InitializeScreenSettings();
+
         int port = getBWPort();
         if (port == -1) {
             System.out.println("No port!");
@@ -187,6 +191,8 @@ public class ResolutionChanger {
     }
 
     public static void setResolutionToThin() {
+        InitializeScreenSettings();
+
         int port = getBWPort();
         if (port == -1) {
             System.out.println("No port!");
@@ -204,6 +210,8 @@ public class ResolutionChanger {
     }
 
     public static void setResolutionToWide() {
+        InitializeScreenSettings();
+        
         int port = getBWPort();
         if (port == -1) {
             System.out.println("No port!");
