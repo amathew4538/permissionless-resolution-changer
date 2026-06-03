@@ -29,6 +29,8 @@ public class PermissionlessResolutionChanger implements ClientModInitializer {
 		// However, some things (like resources) may still be uninitialized.
 		// Proceed with mild caution.
 
+		ResolutionChanger.InitializeScreenSettings();
+
 		baseSizeKeybind = KeyBindingHelper.registerKeyBinding(new KeyBinding(
 			this.Translate("key.prc.base","Base Resolution").getString(),
 			InputUtil.Type.KEYSYM,

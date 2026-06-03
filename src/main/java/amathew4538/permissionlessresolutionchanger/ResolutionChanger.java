@@ -144,7 +144,7 @@ public class ResolutionChanger {
     }
 
     public static int getDpiFromScreenScale(String screenScale) {
-        if (screenScale.equals("2.0")) {
+        if ("2.0".equals(screenScale)) {
             return 8192;
         } else {
             return 16384;
@@ -154,8 +154,10 @@ public class ResolutionChanger {
     // Resolution Setters
     public static void setResolutionToBase() {
         int port = getBWPort();
-        System.out.println("No port!");
-        if (port == -1) return;
+        if (port == -1) {
+            System.out.println("No port!");
+            return;
+        }
 
         try (Socket socket = new Socket("localhost", port); PrintWriter out = new PrintWriter(socket.getOutputStream(), true)) {
             out.println(String.format("set 0 0 %s %s", screenWidth, screenHeight));
@@ -166,8 +168,10 @@ public class ResolutionChanger {
 
     public static void setResolutionToTall() {
         int port = getBWPort();
-        System.out.println("No port!");
-        if (port == -1) return;
+        if (port == -1) {
+            System.out.println("No port!");
+            return;
+        }
 
         try (Socket socket = new Socket("localhost", port); PrintWriter out = new PrintWriter(socket.getOutputStream(), true)) {
             out.println(String.format("set 0 0 384 %s", getDpiFromScreenScale(screenScale)));
@@ -178,8 +182,10 @@ public class ResolutionChanger {
 
     public static void setResolutionToThin() {
         int port = getBWPort();
-        System.out.println("No port!");
-        if (port == -1) return;
+        if (port == -1) {
+            System.out.println("No port!");
+            return;
+        }
 
         try (Socket socket = new Socket("localhost", port); PrintWriter out = new PrintWriter(socket.getOutputStream(), true)) {
             out.println(String.format("set 0 0 384 %s", screenHeight));
@@ -190,8 +196,10 @@ public class ResolutionChanger {
 
     public static void setResolutionToWide() {
         int port = getBWPort();
-        System.out.println("No port!");
-        if (port == -1) return;
+        if (port == -1) {
+            System.out.println("No port!");
+            return;
+        }
 
         try (Socket socket = new Socket("localhost", port); PrintWriter out = new PrintWriter(socket.getOutputStream(), true)) {
             out.println(String.format("set 0 0 %s 300", screenWidth));
