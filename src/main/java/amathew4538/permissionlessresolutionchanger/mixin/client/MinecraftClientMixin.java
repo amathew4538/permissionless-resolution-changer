@@ -1,6 +1,7 @@
 package amathew4538.permissionlessresolutionchanger.mixin.client;
 
 import amathew4538.permissionlessresolutionchanger.PermissionlessResolutionChanger;
+import amathew4538.permissionlessresolutionchanger.ResolutionChanger;
 import net.minecraft.client.MinecraftClient;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
