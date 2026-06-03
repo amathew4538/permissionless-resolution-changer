@@ -24,7 +24,7 @@
 		"permissionless-resolution-changer.mixins.json"
 	],
 	"depends": {
-		"fabricloader": ">=${loader_version}",
+		"fabricloader": ">=0.12.2",
 		"minecraft": "~1.16.1",
 		"java": ">=8",
 		"fabric": "*",
