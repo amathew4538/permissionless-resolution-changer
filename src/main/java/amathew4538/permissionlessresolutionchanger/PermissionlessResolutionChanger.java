@@ -19,6 +19,9 @@ public class PermissionlessResolutionChanger implements ClientModInitializer {
 	public static final Logger LOGGER = LogManager.getLogger(MOD_ID);
 
 	public static KeyBinding baseSizeKeybind;
+	public static KeyBinding tallSizeKeybind;
+	public static KeyBinding thinSizeKeybind;
+	public static KeyBinding wideSizeKeybind;
 
 	@Override
 	public void onInitializeClient() {
