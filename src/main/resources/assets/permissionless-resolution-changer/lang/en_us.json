@@ -1,2 +1,7 @@
 {
+    "key.categories.prc": "Permissionless Resolution Changer",
+    "key.prc.base": "Base Resolution",
+    "key.prc.tall": "Tall Resolution",
+    "key.prc.thin": "Thin Resolution",
+    "key.prc.wide": "Wide Resolution"
 }

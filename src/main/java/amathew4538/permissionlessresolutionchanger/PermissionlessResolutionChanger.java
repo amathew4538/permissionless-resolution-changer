@@ -1,11 +1,10 @@
 package amathew4538.permissionlessresolutionchanger;
 
-import net.fabricmc.api.ModInitializer;
-
+import net.fabricmc.api.ClientModInitializer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class PermissionlessResolutionChanger implements ModInitializer {
+public class PermissionlessResolutionChanger implements ClientModInitializer {
 	public static final String MOD_ID = "permissionless-resolution-changer";
 
 	// This logger is used to write text to the console and the log file.
@@ -13,12 +12,47 @@ public class PermissionlessResolutionChanger implements ModInitializer {
 	// That way, it's clear which mod wrote info, warnings, and errors.
 	public static final Logger LOGGER = LogManager.getLogger(MOD_ID);
 
+	public static KeyBinding baseSizeKeybind;
+
 	@Override
 	public void onInitialize() {
 		// This code runs as soon as Minecraft is in a mod-load-ready state.
 		// However, some things (like resources) may still be uninitialized.
 		// Proceed with mild caution.
 
+		baseSizeKeybind = KeyBindingHelper.registerKeyBinding(new KeyBinding(
+			this.Translate("key.prc.base","Base Resolution").getString(),
+			InputUtil.Type.KEYSYM,
+			GLFW.GLFW_KEY_H,
+			this.Translate("key.categories.prc","Permissionless Resolution Changer").getString()
+		));
+		tallSizeKeybind = KeyBindingHelper.registerKeyBinding(new KeyBinding(
+			this.Translate("key.prc.tall","Tall Resolution").getString(),
+			InputUtil.Type.KEYSYM,
+			GLFW.GLFW_KEY_J,
+			this.Translate("key.categories.prc","Permissionless Resolution Changer").getString()
+		));
+		thinSizeKeybind = KeyBindingHelper.registerKeyBinding(new KeyBinding(
+			this.Translate("key.prc.thin","Thin Resolution").getString(),
+			InputUtil.Type.KEYSYM,
+			GLFW.GLFW_KEY_K,
+			this.Translate("key.categories.prc","Permissionless Resolution Changer").getString()
+		));
+		wideSizeKeybind = KeyBindingHelper.registerKeyBinding(new KeyBinding(
+			this.Translate("key.prc.wide","Wide Resolution").getString(),
+			InputUtil.Type.KEYSYM,
+			GLFW.GLFW_KEY_L,
+			this.Translate("key.categories.prc","Permissionless Resolution Changer").getString()
+		));
+
 		LOGGER.info("Permissionless Resolution Changer Initialized!");
+	}
+
+	public Text Translate(String key, String replacement) {
+		Text t = new TranslatableText(key);
+		if(t.getString().equals(key)){
+			return new LiteralText(replacement);
+		}
+		return t;
 	}
 }
