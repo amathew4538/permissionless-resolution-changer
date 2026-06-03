@@ -21,7 +21,7 @@ public class PermissionlessResolutionChanger implements ClientModInitializer {
 	public static KeyBinding baseSizeKeybind;
 
 	@Override
-	public void onInitialize() {
+	public void onInitializeClient() {
 		// This code runs as soon as Minecraft is in a mod-load-ready state.
 		// However, some things (like resources) may still be uninitialized.
 		// Proceed with mild caution.
