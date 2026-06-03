@@ -9,7 +9,8 @@
 	],
 	"contact": {
 		"homepage": "https://github.com/amathew4538/permissionless-resolution-changer",
-		"sources": "https://github.com/amathew4538/permissionless-resolution-changer"
+		"sources": "https://github.com/amathew4538/permissionless-resolution-changer",
+		"issues": "https://github.com/amathew4538/permissionless-resolution-changer/issues"
 	},
 	"license": "AGPLv3",
 	"icon": "assets/permissionless-resolution-changer/icon.png",
@@ -23,7 +24,7 @@
 		"permissionless-resolution-changer.mixins.json"
 	],
 	"depends": {
-		"fabricloader": ">=0.19.2",
+		"fabricloader": ">=${loader_version}",
 		"minecraft": "~1.16.1",
 		"java": ">=8",
 		"fabric": "*",

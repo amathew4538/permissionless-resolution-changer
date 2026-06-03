@@ -63,7 +63,7 @@ public class PermissionlessResolutionChanger implements ClientModInitializer {
 		if(t.getString().equals(key)){
 			return new LiteralText(replacement);
 		}
-		
+
 		return t;
 	}
 }
