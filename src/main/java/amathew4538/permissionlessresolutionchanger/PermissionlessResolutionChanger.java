@@ -59,9 +59,11 @@ public class PermissionlessResolutionChanger implements ClientModInitializer {
 
 	public Text Translate(String key, String replacement) {
 		Text t = new TranslatableText(key);
+
 		if(t.getString().equals(key)){
 			return new LiteralText(replacement);
 		}
+		
 		return t;
 	}
 }
