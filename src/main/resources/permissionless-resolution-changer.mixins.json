@@ -4,8 +4,9 @@
 	"compatibilityLevel": "JAVA_8",
 	"client": [
 		"access.KeyBindingMixin",
-		
-		"client.GameOptionsMixin"
+
+		"client.GameOptionsMixin",
+		"client.MinecraftClientMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1
