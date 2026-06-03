@@ -151,7 +151,7 @@ public class ResolutionChanger {
         }
     }
 
-    // Resolution Setters
+// Resolution Setters
     public static void setResolutionToBase() {
         int port = getBWPort();
         if (port == -1) {
@@ -161,10 +161,12 @@ public class ResolutionChanger {
 
         try (Socket socket = new Socket("localhost", port); PrintWriter out = new PrintWriter(socket.getOutputStream(), true)) {
             out.println(String.format("set 0 0 %s %s", screenWidth, screenHeight));
-
             out.flush();
             socket.shutdownOutput();
             Thread.sleep(50);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            System.err.println("Thread was interrupted: " + e.getMessage());
         } catch (IOException e) {
             System.err.println("Connection failed: " + e.getMessage());
         }
@@ -179,10 +181,12 @@ public class ResolutionChanger {
 
         try (Socket socket = new Socket("localhost", port); PrintWriter out = new PrintWriter(socket.getOutputStream(), true)) {
             out.println(String.format("set - - 384 %s", getDpiFromScreenScale(screenScale)));
-
             out.flush();
             socket.shutdownOutput();
             Thread.sleep(50);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            System.err.println("Thread was interrupted: " + e.getMessage());
         } catch (IOException e) {
             System.err.println("Connection failed: " + e.getMessage());
         }
@@ -197,10 +201,12 @@ public class ResolutionChanger {
 
         try (Socket socket = new Socket("localhost", port); PrintWriter out = new PrintWriter(socket.getOutputStream(), true)) {
             out.println(String.format("set - - 384 %s", screenHeight));
-
             out.flush();
             socket.shutdownOutput();
             Thread.sleep(50);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            System.err.println("Thread was interrupted: " + e.getMessage());
         } catch (IOException e) {
             System.err.println("Connection failed: " + e.getMessage());
         }
@@ -215,10 +221,12 @@ public class ResolutionChanger {
 
         try (Socket socket = new Socket("localhost", port); PrintWriter out = new PrintWriter(socket.getOutputStream(), true)) {
             out.println(String.format("set - - %s 300", screenWidth));
-
             out.flush();
             socket.shutdownOutput();
             Thread.sleep(50);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            System.err.println("Thread was interrupted: " + e.getMessage());
         } catch (IOException e) {
             System.err.println("Connection failed: " + e.getMessage());
         }
