@@ -3,6 +3,11 @@ package amathew4538.permissionlessresolutionchanger;
 import net.fabricmc.api.ClientModInitializer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.lwjgl.glfw.GLFW;
+import net.minecraft.text.LiteralText;
+import net.minecraft.text.Text;
+import net.minecraft.client.options.KeyBinding;
+import net.minecraft.client.util.InputUtil;
 
 public class PermissionlessResolutionChanger implements ClientModInitializer {
 	public static final String MOD_ID = "permissionless-resolution-changer";
