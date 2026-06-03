@@ -8,6 +8,7 @@ import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import net.minecraft.client.options.KeyBinding;
 import net.minecraft.client.util.InputUtil;
+import net.minecraft.text.TranslatableText;
 
 public class PermissionlessResolutionChanger implements ClientModInitializer {
 	public static final String MOD_ID = "permissionless-resolution-changer";
