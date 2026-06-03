@@ -163,17 +163,12 @@ public class ResolutionChanger {
             Socket socket = new Socket("localhost", port);
 
             PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
             out.println(String.format("set 0 0 %s %s", screenWidth, screenHeight));
             out.flush();
 
             socket.shutdownOutput();
 
-            String response;
-            while ((response = in.readLine()) != null) { }
-
-            in.close();
             out.close();
             socket.close();
 
@@ -192,15 +187,11 @@ public class ResolutionChanger {
         try {
             Socket socket = new Socket("localhost", port);
             PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
             out.println(String.format("set - - 384 %s", getDpiFromScreenScale(screenScale)));
             out.flush();
 
             socket.shutdownOutput();
-
-            String response;
-            while ((response = in.readLine()) != null) { }
 
             in.close();
             out.close();
@@ -221,17 +212,12 @@ public class ResolutionChanger {
         try {
             Socket socket = new Socket("localhost", port);
             PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
             out.println(String.format("set - - 384 %s", screenHeight));
             out.flush();
 
             socket.shutdownOutput();
 
-            String response;
-            while ((response = in.readLine()) != null) { }
-
-            in.close();
             out.close();
             socket.close();
 
@@ -250,17 +236,12 @@ public class ResolutionChanger {
         try {
             Socket socket = new Socket("localhost", port);
             PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
             out.println(String.format("set - - %s 300", screenWidth));
             out.flush();
 
             socket.shutdownOutput();
 
-            String response;
-            while ((response = in.readLine()) != null) { }
-
-            in.close();
             out.close();
             socket.close();
 
