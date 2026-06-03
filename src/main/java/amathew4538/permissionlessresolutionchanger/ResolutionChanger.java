@@ -193,7 +193,6 @@ public class ResolutionChanger {
 
             socket.shutdownOutput();
 
-            in.close();
             out.close();
             socket.close();
 
