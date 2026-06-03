@@ -2,8 +2,8 @@
 	"required": true,
 	"package": "amathew4538.permissionlessresolutionchanger.mixin",
 	"compatibilityLevel": "JAVA_8",
-	"mixins": [
-		"ExampleMixin"
+	"client": [
+		"access.KeyBindingMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1
