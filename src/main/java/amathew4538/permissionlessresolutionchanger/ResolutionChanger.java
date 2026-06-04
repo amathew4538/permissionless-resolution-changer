@@ -20,6 +20,7 @@ public class ResolutionChanger {
     private static String screenWidth;
     private static String screenHeight;
     private static String screenScale;
+    private static String port;
 
     /**
      * Get the resolution settings of the mac
@@ -84,34 +85,42 @@ public class ResolutionChanger {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        try {
+            getBWPort();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    public static String getBWPort() {
-        Path instancesPath = Paths.get(System.getProperty("user.home"), "Library", "Application Support", "PrismLauncher", "instances");
-        try {
-            List<Path> boundlessPortFiles = findPortFiles(instancesPath);
+    public static void getBWPort() {
+        new Thread(() -> {
+            Path instancesPath = Paths.get(System.getProperty("user.home"), "Library", "Application Support", "PrismLauncher", "instances");
+            try {
+                List<Path> boundlessPortFiles = findPortFiles(instancesPath);
 
-            if (boundlessPortFiles.isEmpty()) {
-                System.out.println("No boundless_port.txt files found");
-                return "-1";
-            } else {
-                System.out.println("\nFound the following port files via natives path:");
-                for (Path file : boundlessPortFiles) {
-                    System.out.println("- " + file.toAbsolutePath());
-                    
-                    try {
-                        String port = new String(Files.readAllBytes(file), StandardCharsets.UTF_8).trim();
-                        System.out.println("Active Port: " + port);
-                        return port;
-                    } catch (NumberFormatException e) {
-                        System.err.println("Invalid port number format in file.");
+                if (boundlessPortFiles.isEmpty()) {
+                    System.out.println("No boundless_port.txt files found");
+                    port = "-1";
+                } else {
+                    System.out.println("\nFound the following port files via natives path:");
+                    for (Path file : boundlessPortFiles) {
+                        System.out.println("- " + file.toAbsolutePath());
+
+                        try {
+                            port = new String(Files.readAllBytes(file), StandardCharsets.UTF_8).trim();
+                            System.out.println("Active Port: " + port);
+                        } catch (NumberFormatException e) {
+                            System.err.println("Invalid port number format in file.");
+                            port = "-1";
+                        }
                     }
                 }
+            } catch (IOException e) {
+                System.err.println("Error reading directories or files: " + e.getMessage());
             }
-        } catch (IOException e) {
-            System.err.println("Error reading directories or files: " + e.getMessage());
-        }
-        return "-1";
+            port = "-1";
+        }).start();
     }
 
     /**
@@ -154,53 +163,52 @@ public class ResolutionChanger {
 
     // Resolution Setters
     public static void setResolutionToBase() {
-        String port = getBWPort();
         if (port == "-1") {
             System.out.println("No port!");
             return;
         }
+        new Thread(() -> {
+            try {
+                String targetResolution = String.format("set 0 0 %s %s", screenWidth, screenHeight);
 
-        try {
-            String targetResolution = String.format("set 0 0 %s %s", screenWidth, screenHeight);
+                String bashCommand = String.format("echo %s | nc localhost %s >/dev/null", targetResolution, port);
 
-            String bashCommand = String.format("echo %s | nc localhost %s >/dev/null", targetResolution, port);
+                ProcessBuilder pb = new ProcessBuilder("bash", "-c", bashCommand);
+                Process process = pb.start();
 
-            ProcessBuilder pb = new ProcessBuilder("bash", "-c", bashCommand);
-            Process process = pb.start();
-
-            if (process.waitFor() != 0) {
-                System.err.println("Error changing resolution");
+                if (process.waitFor() != 0) {
+                    System.err.println("Error changing resolution");
+                }
+            } catch (Exception e) {
+                System.err.println("Connection failed: " + e.getMessage());
             }
-        } catch (Exception e) {
-            System.err.println("Connection failed: " + e.getMessage());
-        }
+        }).start();
     }
 
     public static void setResolutionToTall() {
-        String port = getBWPort();
         if (port == "-1") {
             System.out.println("No port!");
             return;
         }
+        new Thread(() -> {
+            try {
+                String targetResolution = String.format("set - - 384 %s", getDpiFromScreenScale(screenScale));
 
-        try {
-            String targetResolution = String.format("set - - 384 %s", getDpiFromScreenScale(screenScale));
+                String bashCommand = String.format("echo %s | nc localhost %s >/dev/null", targetResolution, port);
 
-            String bashCommand = String.format("echo %s | nc localhost %s >/dev/null", targetResolution, port);
+                ProcessBuilder pb = new ProcessBuilder("bash", "-c", bashCommand);
+                Process process = pb.start();
 
-            ProcessBuilder pb = new ProcessBuilder("bash", "-c", bashCommand);
-            Process process = pb.start();
-
-            if (process.waitFor() != 0) {
-                System.err.println("Error changing resolution");
+                if (process.waitFor() != 0) {
+                    System.err.println("Error changing resolution");
+                }
+            } catch (Exception e) {
+                System.err.println("Connection failed: " + e.getMessage());
             }
-        } catch (Exception e) {
-            System.err.println("Connection failed: " + e.getMessage());
-        }
+        }).start();
     }
 
     public static void setResolutionToThin() {
-        String port = getBWPort();
         if (port == "-1") {
             System.out.println("No port!");
             return;
@@ -223,7 +231,6 @@ public class ResolutionChanger {
     }
 
     public static void setResolutionToWide() {
-        String port = getBWPort();
         if (port == "-1") {
             System.out.println("No port!");
             return;
