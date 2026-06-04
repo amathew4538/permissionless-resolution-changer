@@ -20,6 +20,7 @@ public class ResolutionChanger {
     private static String screenWidth;
     private static String screenHeight;
     private static String screenScale;
+    private static String dpi;
     private static String port = "-1";
 
     /**
@@ -86,6 +87,12 @@ public class ResolutionChanger {
             e.printStackTrace();
         }
 
+        if ("2.0".equals(screenScale)) {
+            dpi = "8192";
+        } else {
+            dpi = "16384";
+        }
+
         getBWPort();
     }
 
@@ -147,14 +154,6 @@ public class ResolutionChanger {
         return foundFiles;
     }
 
-    public static String getDpiFromScreenScale(String screenScale) {
-        if ("2.0".equals(screenScale)) {
-            return "8192";
-        } else {
-            return "16384";
-        }
-    }
-
     // Resolution Setters
     private static void sendResolutionCommandAsync(String targetResolution) {
         getBWPort();
@@ -190,7 +189,7 @@ public class ResolutionChanger {
     }
 
     public static void setResolutionToTall() {
-        String targetResolution = String.format("set - - 384 %s", getDpiFromScreenScale(screenScale));
+        String targetResolution = String.format("set - - 384 %s", dpi);
         sendResolutionCommandAsync(targetResolution);
     }
 
@@ -208,6 +207,6 @@ public class ResolutionChanger {
     public static String getScreenWidth() { return screenWidth; }
     public static String getScreenHeight() { return screenHeight; }
     public static String getscreenScale() { return screenScale; }
-    public static String getDPI() { return getDpiFromScreenScale(screenScale); }
+    public static String getDPI() { return dpi; }
     public static String getPort() { return port; }
 }
