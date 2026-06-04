@@ -157,7 +157,7 @@ public class ResolutionChanger {
 
     // Resolution Setters
     private static void sendResolutionCommandAsync(String targetResolution) {
-        port = getBWPort();
+        getBWPort();
         
         if (port == null || port.equals("-1")) {
             System.out.println("No port!");
