@@ -171,7 +171,7 @@ public class ResolutionChanger {
             if (process.waitFor() != 0) {
                 System.err.println("Error changing resolution");
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             System.err.println("Connection failed: " + e.getMessage());
         }
     }
@@ -194,7 +194,7 @@ public class ResolutionChanger {
             if (process.waitFor() != 0) {
                 System.err.println("Error changing resolution");
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             System.err.println("Connection failed: " + e.getMessage());
         }
     }
@@ -217,7 +217,7 @@ public class ResolutionChanger {
             if (process.waitFor() != 0) {
                 System.err.println("Error changing resolution");
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             System.err.println("Connection failed: " + e.getMessage());
         }
     }
@@ -240,7 +240,7 @@ public class ResolutionChanger {
             if (process.waitFor() != 0) {
                 System.err.println("Error changing resolution");
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             System.err.println("Connection failed: " + e.getMessage());
         }
     }
