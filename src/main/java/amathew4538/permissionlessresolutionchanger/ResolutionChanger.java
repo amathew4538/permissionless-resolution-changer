@@ -166,12 +166,16 @@ public class ResolutionChanger {
 
         new Thread(() -> {
             try {
-                String bashCommand = String.format("echo %s | nc localhost %s >/dev/null", targetResolution, port);
+                String bashCommand = String.format("echo %s | nc localhost %s", targetResolution, port);
                 ProcessBuilder pb = new ProcessBuilder("bash", "-c", bashCommand);
+
+                pb.redirectErrorStream(true);
+                pb.inheritIO();
+
                 Process process = pb.start();
 
                 if (process.waitFor() != 0) {
-                    System.err.println("Error changing resolution during command execution.");
+                    System.err.println("Error changing resolution. Bash exited with code: " + exitCode);
                 }
             } catch (Exception e) {
                 System.err.println("Connection failed: " + e.getMessage());
