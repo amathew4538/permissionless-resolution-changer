@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 import java.io.PrintWriter;
+import java.nio.charset;
 
 public class ResolutionChanger {
     private static String screenWidth;
@@ -25,7 +26,7 @@ public class ResolutionChanger {
      */
     public static void InitializeScreenSettings() {
         String resolutionOsascript = "tell application \"Finder\" to get bounds of window of desktop";
-        String screenScaleOsascript = "tell application \"System Events\" to return backing scale factor of window 1 of (first process whose frontmost is true)";
+        String screenScaleOsascript = "tell application \"System Events\" to return backing scale factor of window 1";
 
         try {
             String resolutionBashCommand = "osascript -e '" + resolutionOsascript + "'";
@@ -85,7 +86,7 @@ public class ResolutionChanger {
         }
     }
 
-    public static int getBWPort() {
+    public static String getBWPort() {
         Path instancesPath = Paths.get(System.getProperty("user.home"), "Library", "Application Support", "PrismLauncher", "instances");
         try {
             List<Path> boundlessPortFiles = findPortFiles(instancesPath);
@@ -99,9 +100,9 @@ public class ResolutionChanger {
                     System.out.println("- " + file.toAbsolutePath());
                     
                     try {
-                        String portStr = new String(Files.readAllBytes(file), java.nio.charset.StandardCharsets.UTF_8).trim();
-                        System.out.println("Active Port: " + portStr);
-                        return Integer.parseInt(portStr);
+                        String port = new String(Files.readAllBytes(file), StandardCharsets.UTF_8).trim();
+                        System.out.println("Active Port: " + port);
+                        return port;
                     } catch (NumberFormatException e) {
                         System.err.println("Invalid port number format in file.");
                     }
@@ -143,109 +144,88 @@ public class ResolutionChanger {
         return foundFiles;
     }
 
-    public static int getDpiFromScreenScale(String screenScale) {
+    public static String getDpiFromScreenScale(String screenScale) {
         if ("2.0".equals(screenScale)) {
-            return 8192;
+            return "8192";
         } else {
-            return 16384;
+            return "16384";
         }
     }
 
     // Resolution Setters
     public static void setResolutionToBase() {
-        int port = getBWPort();
+        String port = getBWPort();
         if (port == -1) {
             System.out.println("No port!");
             return;
         }
 
         try {
-            Socket socket = new Socket("localhost", port);
+            String targetResolution = String.format("set 0 0 %s %s", screenWidth, screenHeight);
 
-            PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+            String bashCommand = String.format("echo %s | nc localhost %s >/dev/null", targetResolution, port);
 
-            out.println(String.format("set 0 0 %s %s", screenWidth, screenHeight));
-            out.flush();
-
-            socket.shutdownOutput();
-
-            out.close();
-            socket.close();
-
+            ProcessBuilder pb = new ProcessBuilder("bash", "-c", bashCommand);
+            Process process = pb.start();
         } catch (IOException e) {
-            System.err.println("Connection failed safely: " + e.getMessage());
+            System.err.println("Connection failed: " + e.getMessage());
         }
     }
 
     public static void setResolutionToTall() {
-        int port = getBWPort();
+        String port = getBWPort();
         if (port == -1) {
             System.out.println("No port!");
             return;
         }
 
         try {
-            Socket socket = new Socket("localhost", port);
-            PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+            String targetResolution = String.format("set - - 384 %s", getDpiFromScreenScale(screenScale));
 
-            out.println(String.format("set - - 384 %s", getDpiFromScreenScale(screenScale)));
-            out.flush();
+            String bashCommand = String.format("echo %s | nc localhost %s >/dev/null", targetResolution, port);
 
-            socket.shutdownOutput();
-
-            out.close();
-            socket.close();
-
+            ProcessBuilder pb = new ProcessBuilder("bash", "-c", bashCommand);
+            Process process = pb.start();
         } catch (IOException e) {
-            System.err.println("Connection failed safely: " + e.getMessage());
+            System.err.println("Connection failed: " + e.getMessage());
         }
     }
 
     public static void setResolutionToThin() {
-        int port = getBWPort();
+        String port = getBWPort();
         if (port == -1) {
             System.out.println("No port!");
             return;
         }
 
         try {
-            Socket socket = new Socket("localhost", port);
-            PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+            String targetResolution = String.format("set - - 384 %s", screenHeight);
 
-            out.println(String.format("set - - 384 %s", screenHeight));
-            out.flush();
+            String bashCommand = String.format("echo %s | nc localhost %s >/dev/null", targetResolution, port);
 
-            socket.shutdownOutput();
-
-            out.close();
-            socket.close();
-
+            ProcessBuilder pb = new ProcessBuilder("bash", "-c", bashCommand);
+            Process process = pb.start();
         } catch (IOException e) {
-            System.err.println("Connection failed safely: " + e.getMessage());
+            System.err.println("Connection failed: " + e.getMessage());
         }
     }
 
     public static void setResolutionToWide() {
-        int port = getBWPort();
+        String port = getBWPort();
         if (port == -1) {
             System.out.println("No port!");
             return;
         }
 
         try {
-            Socket socket = new Socket("localhost", port);
-            PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+            String targetResolution = String.format("set - - %s 300", screenWidth);
 
-            out.println(String.format("set - - %s 300", screenWidth));
-            out.flush();
+            String bashCommand = String.format("echo %s | nc localhost %s >/dev/null", targetResolution, port);
 
-            socket.shutdownOutput();
-
-            out.close();
-            socket.close();
-
+            ProcessBuilder pb = new ProcessBuilder("bash", "-c", bashCommand);
+            Process process = pb.start();
         } catch (IOException e) {
-            System.err.println("Connection failed safely: " + e.getMessage());
+            System.err.println("Connection failed: " + e.getMessage());
         }
     }
 
@@ -253,5 +233,5 @@ public class ResolutionChanger {
     public static String getScreenWidth() { return screenWidth; }
     public static String getScreenHeight() { return screenHeight; }
     public static String getscreenScale() { return screenScale; }
-    public static int getDPI() { return getDpiFromScreenScale(screenScale); }
+    public static String getDPI() { return getDpiFromScreenScale(screenScale); }
 }
