@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 import java.io.PrintWriter;
-import java.nio.charset;
+import java.nio.charset.StandardCharsets;
 
 public class ResolutionChanger {
     private static String screenWidth;
@@ -93,7 +93,7 @@ public class ResolutionChanger {
 
             if (boundlessPortFiles.isEmpty()) {
                 System.out.println("No boundless_port.txt files found");
-                return "-1"; 
+                return "-1";
             } else {
                 System.out.println("\nFound the following port files via natives path:");
                 for (Path file : boundlessPortFiles) {
@@ -167,6 +167,10 @@ public class ResolutionChanger {
 
             ProcessBuilder pb = new ProcessBuilder("bash", "-c", bashCommand);
             Process process = pb.start();
+
+            if (process.waitFor() != 0) {
+                System.err.println("Error changing resolution");
+            }
         } catch (IOException e) {
             System.err.println("Connection failed: " + e.getMessage());
         }
@@ -186,6 +190,10 @@ public class ResolutionChanger {
 
             ProcessBuilder pb = new ProcessBuilder("bash", "-c", bashCommand);
             Process process = pb.start();
+
+            if (process.waitFor() != 0) {
+                System.err.println("Error changing resolution");
+            }
         } catch (IOException e) {
             System.err.println("Connection failed: " + e.getMessage());
         }
@@ -205,6 +213,10 @@ public class ResolutionChanger {
 
             ProcessBuilder pb = new ProcessBuilder("bash", "-c", bashCommand);
             Process process = pb.start();
+
+            if (process.waitFor() != 0) {
+                System.err.println("Error changing resolution");
+            }
         } catch (IOException e) {
             System.err.println("Connection failed: " + e.getMessage());
         }
@@ -224,6 +236,10 @@ public class ResolutionChanger {
 
             ProcessBuilder pb = new ProcessBuilder("bash", "-c", bashCommand);
             Process process = pb.start();
+
+            if (process.waitFor() != 0) {
+                System.err.println("Error changing resolution");
+            }
         } catch (IOException e) {
             System.err.println("Connection failed: " + e.getMessage());
         }
