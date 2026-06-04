@@ -174,7 +174,8 @@ public class ResolutionChanger {
 
                 Process process = pb.start();
 
-                if (process.waitFor() != 0) {
+                int exitCode = process.waitFor();
+                if (exitCode != 0) {
                     System.err.println("Error changing resolution. Bash exited with code: " + exitCode);
                 }
             } catch (Exception e) {
