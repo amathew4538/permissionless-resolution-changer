@@ -90,33 +90,31 @@ public class ResolutionChanger {
     }
 
     public static void getBWPort() {
-        new Thread(() -> {
-            Path instancesPath = Paths.get(System.getProperty("user.home"), "Library", "Application Support", "PrismLauncher", "instances");
-            try {
-                List<Path> boundlessPortFiles = findPortFiles(instancesPath);
+        Path instancesPath = Paths.get(System.getProperty("user.home"), "Library", "Application Support", "PrismLauncher", "instances");
+        try {
+            List<Path> boundlessPortFiles = findPortFiles(instancesPath);
 
-                if (boundlessPortFiles.isEmpty()) {
-                    System.out.println("No boundless_port.txt files found");
-                    port = "-1";
-                } else {
-                    System.out.println("\nFound the following port files via natives path:");
-                    for (Path file : boundlessPortFiles) {
-                        System.out.println("- " + file.toAbsolutePath());
+            if (boundlessPortFiles.isEmpty()) {
+                System.out.println("No boundless_port.txt files found");
+                port = "-1";
+            } else {
+                System.out.println("\nFound the following port files via natives path:");
+                for (Path file : boundlessPortFiles) {
+                    System.out.println("- " + file.toAbsolutePath());
 
-                        try {
-                            port = new String(Files.readAllBytes(file), StandardCharsets.UTF_8).trim();
-                            System.out.println("Active Port: " + port);
-                        } catch (NumberFormatException e) {
-                            System.err.println("Invalid port number format in file.");
-                            port = "-1";
-                        }
+                    try {
+                        port = new String(Files.readAllBytes(file), StandardCharsets.UTF_8).trim();
+                        System.out.println("Active Port: " + port);
+                    } catch (NumberFormatException e) {
+                        System.err.println("Invalid port number format in file.");
+                        port = "-1";
                     }
                 }
-            } catch (IOException e) {
-                System.err.println("Error reading directories or files: " + e.getMessage());
-                port = "-1";
             }
-        }).start();
+        } catch (IOException e) {
+            System.err.println("Error reading directories or files: " + e.getMessage());
+            port = "-1";
+        }
     }
 
     /**
