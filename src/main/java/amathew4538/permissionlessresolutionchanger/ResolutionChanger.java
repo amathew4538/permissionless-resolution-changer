@@ -93,7 +93,7 @@ public class ResolutionChanger {
 
             if (boundlessPortFiles.isEmpty()) {
                 System.out.println("No boundless_port.txt files found");
-                return -1; 
+                return "-1"; 
             } else {
                 System.out.println("\nFound the following port files via natives path:");
                 for (Path file : boundlessPortFiles) {
@@ -111,7 +111,7 @@ public class ResolutionChanger {
         } catch (IOException e) {
             System.err.println("Error reading directories or files: " + e.getMessage());
         }
-        return -1;
+        return "-1";
     }
 
     /**
@@ -155,7 +155,7 @@ public class ResolutionChanger {
     // Resolution Setters
     public static void setResolutionToBase() {
         String port = getBWPort();
-        if (port == -1) {
+        if (port == "-1") {
             System.out.println("No port!");
             return;
         }
@@ -174,7 +174,7 @@ public class ResolutionChanger {
 
     public static void setResolutionToTall() {
         String port = getBWPort();
-        if (port == -1) {
+        if (port == "-1") {
             System.out.println("No port!");
             return;
         }
@@ -193,7 +193,7 @@ public class ResolutionChanger {
 
     public static void setResolutionToThin() {
         String port = getBWPort();
-        if (port == -1) {
+        if (port == "-1") {
             System.out.println("No port!");
             return;
         }
@@ -212,7 +212,7 @@ public class ResolutionChanger {
 
     public static void setResolutionToWide() {
         String port = getBWPort();
-        if (port == -1) {
+        if (port == "-1") {
             System.out.println("No port!");
             return;
         }
