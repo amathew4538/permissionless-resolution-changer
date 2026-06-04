@@ -20,7 +20,7 @@ public class ResolutionChanger {
     private static String screenWidth;
     private static String screenHeight;
     private static String screenScale;
-    private static String port;
+    private static String port = "-1";
 
     /**
      * Get the resolution settings of the mac
@@ -86,11 +86,7 @@ public class ResolutionChanger {
             e.printStackTrace();
         }
 
-        try {
-            getBWPort();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        getBWPort();
     }
 
     public static void getBWPort() {
@@ -118,8 +114,8 @@ public class ResolutionChanger {
                 }
             } catch (IOException e) {
                 System.err.println("Error reading directories or files: " + e.getMessage());
+                port = "-1";
             }
-            port = "-1";
         }).start();
     }
 
@@ -162,94 +158,45 @@ public class ResolutionChanger {
     }
 
     // Resolution Setters
-    public static void setResolutionToBase() {
-        if (port == "-1") {
+    private static void sendResolutionCommandAsync(String targetResolution) {
+        if (port == null || port.equals("-1")) {
             System.out.println("No port!");
             return;
         }
+
         new Thread(() -> {
             try {
-                String targetResolution = String.format("set 0 0 %s %s", screenWidth, screenHeight);
-
                 String bashCommand = String.format("echo %s | nc localhost %s >/dev/null", targetResolution, port);
-
                 ProcessBuilder pb = new ProcessBuilder("bash", "-c", bashCommand);
                 Process process = pb.start();
 
                 if (process.waitFor() != 0) {
-                    System.err.println("Error changing resolution");
+                    System.err.println("Error changing resolution during command execution.");
                 }
             } catch (Exception e) {
                 System.err.println("Connection failed: " + e.getMessage());
             }
         }).start();
+    }
+
+    public static void setResolutionToBase() {
+        String targetResolution = String.format("set 0 0 %s %s", screenWidth, screenHeight);
+        sendResolutionCommandAsync(targetResolution);
     }
 
     public static void setResolutionToTall() {
-        if (port == "-1") {
-            System.out.println("No port!");
-            return;
-        }
-        new Thread(() -> {
-            try {
-                String targetResolution = String.format("set - - 384 %s", getDpiFromScreenScale(screenScale));
-
-                String bashCommand = String.format("echo %s | nc localhost %s >/dev/null", targetResolution, port);
-
-                ProcessBuilder pb = new ProcessBuilder("bash", "-c", bashCommand);
-                Process process = pb.start();
-
-                if (process.waitFor() != 0) {
-                    System.err.println("Error changing resolution");
-                }
-            } catch (Exception e) {
-                System.err.println("Connection failed: " + e.getMessage());
-            }
-        }).start();
+        String targetResolution = String.format("set - - 384 %s", getDpiFromScreenScale(screenScale));
+        sendResolutionCommandAsync(targetResolution);
     }
 
     public static void setResolutionToThin() {
-        if (port == "-1") {
-            System.out.println("No port!");
-            return;
-        }
-
-        try {
-            String targetResolution = String.format("set - - 384 %s", screenHeight);
-
-            String bashCommand = String.format("echo %s | nc localhost %s >/dev/null", targetResolution, port);
-
-            ProcessBuilder pb = new ProcessBuilder("bash", "-c", bashCommand);
-            Process process = pb.start();
-
-            if (process.waitFor() != 0) {
-                System.err.println("Error changing resolution");
-            }
-        } catch (Exception e) {
-            System.err.println("Connection failed: " + e.getMessage());
-        }
+        String targetResolution = String.format("set - - 384 %s", screenHeight);
+        sendResolutionCommandAsync(targetResolution);
     }
 
     public static void setResolutionToWide() {
-        if (port == "-1") {
-            System.out.println("No port!");
-            return;
-        }
-
-        try {
-            String targetResolution = String.format("set - - %s 300", screenWidth);
-
-            String bashCommand = String.format("echo %s | nc localhost %s >/dev/null", targetResolution, port);
-
-            ProcessBuilder pb = new ProcessBuilder("bash", "-c", bashCommand);
-            Process process = pb.start();
-
-            if (process.waitFor() != 0) {
-                System.err.println("Error changing resolution");
-            }
-        } catch (Exception e) {
-            System.err.println("Connection failed: " + e.getMessage());
-        }
+        String targetResolution = String.format("set - - %s 300", screenWidth);
+        sendResolutionCommandAsync(targetResolution);
     }
 
     // Read-only getters
@@ -257,4 +204,5 @@ public class ResolutionChanger {
     public static String getScreenHeight() { return screenHeight; }
     public static String getscreenScale() { return screenScale; }
     public static String getDPI() { return getDpiFromScreenScale(screenScale); }
+    public static String getPort() { return port; }
 }
