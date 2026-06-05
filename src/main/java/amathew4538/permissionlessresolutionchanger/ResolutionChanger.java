@@ -28,7 +28,7 @@ public class ResolutionChanger {
      */
     public static void InitializeScreenSettings() {
         String resolutionOsascript = "tell application \"Finder\" to get bounds of window of desktop";
-        String screenScaleOsascript = "tell application \"System Events\" to return backing scale factor of window 1";
+        String screenScaleOsascript = "JavaScript -e 'ObjC.import(\"AppKit\"); $.NSScreen.mainScreen.backingScaleFactor'";
 
         try {
             String resolutionBashCommand = "osascript -e '" + resolutionOsascript + "'";
@@ -63,7 +63,7 @@ public class ResolutionChanger {
         }
 
         try {
-            String screenScaleBashCommand = "osascript -e '" + screenScaleOsascript + "'";
+            String screenScaleBashCommand = "osascript -l '" + screenScaleOsascript + "'";
             ProcessBuilder screenScalePB = new ProcessBuilder("bash", "-c", screenScaleBashCommand);
             Process screenScaleProcess = screenScalePB.start();
 
@@ -80,14 +80,14 @@ public class ResolutionChanger {
                 System.out.println("Screen Scale: " + screenScale);
             } else {
                 System.err.println("AppleScript execution failed with exit code: " + exitCode);
-                screenScale = "2.0";
+                screenScale = "2";
                 System.out.println("Screen Scale: " + screenScale);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        if ("2.0".equals(screenScale)) {
+        if ("2".equals(screenScale)) {
             dpi = "8192";
         } else {
             dpi = "16384";
