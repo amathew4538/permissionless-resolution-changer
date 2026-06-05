@@ -27,11 +27,8 @@ public class ResolutionChanger {
      * Get the resolution settings of the mac
      */
     public static void InitializeScreenSettings() {
-        String resolutionOsascript = "tell application \"Finder\" to get bounds of window of desktop";
-
         try {
-            String resolutionBashCommand = "osascript -e '" + resolutionOsascript + "'";
-            ProcessBuilder resolutionPB = new ProcessBuilder("osascript", "-e", resolutionBashCommand);
+            ProcessBuilder resolutionPB = new ProcessBuilder("osascript", "-e", "tell application \"Finder\" to get bounds of window of desktop");
             Process resolutionProcess = resolutionPB.start();
 
             String resolutionOutput = "";
