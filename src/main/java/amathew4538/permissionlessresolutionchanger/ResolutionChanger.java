@@ -100,7 +100,7 @@ public class ResolutionChanger {
                 System.out.println("No boundless_port.txt files found");
                 port = "-1";
             } else {
-                System.out.println("\nFound the following port files via natives path:");
+                System.out.println("\nFound the following port files:");
                 for (Path file : boundlessPortFiles) {
                     System.out.println("- " + file.toAbsolutePath());
 
