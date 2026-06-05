@@ -27,12 +27,8 @@ public class ResolutionChanger {
      * Get the resolution settings of the mac
      */
     public static void InitializeScreenSettings() {
-        String resolutionOsascript = "tell application \"Finder\" to get bounds of window of desktop";
-        String screenScaleOsascript = "JavaScript -e 'ObjC.import(\"AppKit\"); $.NSScreen.mainScreen.backingScaleFactor'";
-
         try {
-            String resolutionBashCommand = "osascript -e '" + resolutionOsascript + "'";
-            ProcessBuilder resolutionPB = new ProcessBuilder("bash", "-c", resolutionBashCommand);
+            ProcessBuilder resolutionPB = new ProcessBuilder("osascript", "-e", "tell application 'Finder' to get bounds of window of desktop");
             Process resolutionProcess = resolutionPB.start();
 
             String resolutionOutput = "";
@@ -63,8 +59,7 @@ public class ResolutionChanger {
         }
 
         try {
-            String screenScaleBashCommand = "osascript -l '" + screenScaleOsascript + "'";
-            ProcessBuilder screenScalePB = new ProcessBuilder("bash", "-c", screenScaleBashCommand);
+            ProcessBuilder screenScalePB = new ProcessBuilder("osascript", "-l", "JavaScript", "-e", "ObjC.import('AppKit'); $.NSScreen.mainScreen.backingScaleFactor");
             Process screenScaleProcess = screenScalePB.start();
 
             String screenScaleOutput = "";
