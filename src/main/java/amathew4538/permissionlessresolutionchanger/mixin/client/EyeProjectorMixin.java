@@ -26,7 +26,7 @@ public class EyeProjectorMixin {
     private void OnClientTick(CallbackInfo ci) {
         GLFW.glfwPollEvents();
 
-        if (ResolutionChanger.isTallChanging) {
+        while (ResolutionChanger.isTallChanging) {
             if (MinecraftClient.getInstance().getWindow().getFramebufferHeight() == Integer.parseInt(ResolutionChanger.getDPI())) {
                 ResolutionChanger.isTallChanging = false;
                 EyeProjector.StartProjector();
