@@ -36,6 +36,8 @@ public class EyeProjector {
 
                 GLFW.glfwMakeContextCurrent(window);
                 GLFW.glfwShowWindow(window);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
 
             while (!GLFW.glfwWindowShouldClose(window)) {
