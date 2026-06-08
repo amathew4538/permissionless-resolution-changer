@@ -8,8 +8,8 @@ import org.lwjgl.system.MemoryUtil;
 import org.lwjgl.glfw.GLFWErrorCallback;
 
 public class EyeProjector {
-    long clientWindowHandle;
-    long window;
+    private static long clientWindowHandle;
+    private static long window;
 
     public static void StartProjector() {
         clientWindowHandle = MinecraftClient.getInstance().getWindow().getHandle();
