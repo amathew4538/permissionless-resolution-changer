@@ -28,7 +28,7 @@ public class EyeProjectorMixin {
 
         if (ResolutionChanger.isTallChanging) {
             if (MinecraftClient.getInstance().getWindow().getFramebufferHeight() == Integer.parseInt(ResolutionChanger.getDPI())) {
-                ResolutionChanger.waitingForTallStabilization = false;
+                ResolutionChanger.isTallChanging = false;
                 EyeProjector.StartProjector();
             }
         }
