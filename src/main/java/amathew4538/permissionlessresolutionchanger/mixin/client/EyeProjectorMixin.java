@@ -31,6 +31,7 @@ public class EyeProjectorMixin {
                 ResolutionChanger.isTallChanging = false;
                 EyeProjector.StartProjector();
             }
+            Thread.sleep(16);
         }
     }
 }
