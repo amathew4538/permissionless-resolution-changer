@@ -38,17 +38,34 @@ public class EyeProjector {
                 Integer.parseInt(ResolutionChanger.getScreenHeight()) / 2
             );
 
-            GLFW.glfwMakeContextCurrent(window);
-            GL.createCapabilities();
+            GLFW.glfwMakeContextCurrent(MemoryUtil.NULL);
             GLFW.glfwShowWindow(window);
         } catch (Exception e) {
             e.printStackTrace();
         }
         
         Thread projectorThread = new Thread(() -> {
+            try {
+                GLFW.glfwMakeContextCurrent(window);
+                GL.createCapabilities();
+                
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
             while (!GLFW.glfwWindowShouldClose(window)) {
+                GL11.glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
                 GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
+                
+                // Texture logic will go here
+                
                 GLFW.glfwSwapBuffers(window);
+                
+                try {
+                    Thread.sleep(16);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
             }
         });
 
