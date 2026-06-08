@@ -31,7 +31,12 @@ public class EyeProjectorMixin {
                 ResolutionChanger.isTallChanging = false;
                 EyeProjector.StartProjector();
             }
-            Thread.sleep(16);
+            try {
+                Thread.sleep(16);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+                Thread.currentThread().interrupt();
+            }
         }
     }
 }
