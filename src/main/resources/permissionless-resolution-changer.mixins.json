@@ -6,7 +6,8 @@
 		"access.KeyBindingMixin",
 
 		"client.GameOptionsMixin",
-		"client.MinecraftClientMixin"
+		"client.MinecraftClientMixin",
+		"client.EyeProjectorMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

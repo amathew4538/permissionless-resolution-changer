@@ -87,8 +87,6 @@ public class ResolutionChanger {
         } else {
             dpi = "16384";
         }
-
-        getBWPort();
     }
 
     public static void getBWPort() {
