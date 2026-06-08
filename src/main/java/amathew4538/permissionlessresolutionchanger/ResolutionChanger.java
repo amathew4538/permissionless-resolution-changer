@@ -150,7 +150,7 @@ public class ResolutionChanger {
     // Resolution Setters
     private static void sendResolutionCommandAsync(String targetResolution) {
         getBWPort();
-        
+
         if (port == null || port.equals("-1")) {
             System.out.println("No port!");
             return;
@@ -181,7 +181,10 @@ public class ResolutionChanger {
         sendResolutionCommandAsync(targetResolution);
     }
 
+    public static boolean isTallChanging = false;
+
     public static void setResolutionToTall() {
+        isTallChanging = true;
         String targetResolution = String.format("set - - 384 %s", dpi);
         sendResolutionCommandAsync(targetResolution);
     }

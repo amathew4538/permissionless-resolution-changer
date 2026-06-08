@@ -1,5 +1,6 @@
 package amathew4538.permissionlessresolutionchanger.mixin.client;
 
+import amathew4538.permissionlessresolutionchanger.ResolutionChanger;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.options.GameOptions;
 import net.minecraft.client.options.KeyBinding;
@@ -23,5 +24,12 @@ public class EyeProjectorMixin {
     @Inject(method = "tick", at = @At("HEAD"))
     private void OnClientTick(CallbackInfo ci) {
         GLFW.glfwPollEvents();
+
+        if (ResolutionChanger.isTallChanging) {
+            if (MinecraftClient.getInstance().getWindow().getFramebufferHeight() == Integer.parseInt(ResolutionChanger.getDpi())) {
+                ResolutionChanger.waitingForTallStabilization = false;
+                EyeProjector.StartProjector();
+            }
+        }
     }
 }

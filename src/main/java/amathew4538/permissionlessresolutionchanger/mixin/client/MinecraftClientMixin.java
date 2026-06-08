@@ -17,7 +17,6 @@ public class MinecraftClientMixin {
             ResolutionChanger.setResolutionToBase();
         } else if (PermissionlessResolutionChanger.tallSizeKeybind.wasPressed()) {
             ResolutionChanger.setResolutionToTall();
-            EyeProjector.StartProjector();
         } else if (PermissionlessResolutionChanger.thinSizeKeybind.wasPressed()) {
             ResolutionChanger.setResolutionToThin();
         } else if (PermissionlessResolutionChanger.wideSizeKeybind.wasPressed()) {
