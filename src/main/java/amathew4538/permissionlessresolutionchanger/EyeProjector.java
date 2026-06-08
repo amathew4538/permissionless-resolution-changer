@@ -28,7 +28,7 @@ public class EyeProjector {
             GLFW.glfwWindowHint(GLFW.GLFW_FLOATING, GLFW.GLFW_TRUE);
 
             window = GLFW.glfwCreateWindow(384, 384, "Eye Projector", MemoryUtil.NULL, clientWindowHandle);
-            if(window == NULL) {
+            if(window == MemoryUtil.NULL) {
                 throw new IllegalStateException("Unable to create GLFW Window");
             }
 
