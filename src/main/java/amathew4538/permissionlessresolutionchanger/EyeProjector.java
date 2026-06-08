@@ -31,13 +31,6 @@ public class EyeProjector {
             throw new IllegalStateException("Unable to create GLFW Window");
         }
 
-        Thread projectorThread = new Thread(() -> {
-            while (!GLFW.glfwWindowShouldClose(window)) {
-                GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
-                GLFW.glfwSwapBuffers(window);
-            }
-        });
-
         try {
             GLFW.glfwSetWindowPos(
                 window,
@@ -51,6 +44,13 @@ public class EyeProjector {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        
+        Thread projectorThread = new Thread(() -> {
+            while (!GLFW.glfwWindowShouldClose(window)) {
+                GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
+                GLFW.glfwSwapBuffers(window);
+            }
+        });
 
         projectorThread.setDaemon(true);
         projectorThread.start();
