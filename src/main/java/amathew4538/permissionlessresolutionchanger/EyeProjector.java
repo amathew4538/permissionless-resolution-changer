@@ -34,11 +34,10 @@ public class EyeProjector {
         try {
             GLFW.glfwSetWindowPos(
                 window,
-                (Integer.parseInt(ResolutionChanger.getScreenWidth()) / 2 - 192) / 2,
-                Integer.parseInt(ResolutionChanger.getScreenHeight()) / 2
+                (Integer.parseInt(ResolutionChanger.getScreenWidth()) / 2 - 192) / 2 - 192,
+                Integer.parseInt(ResolutionChanger.getScreenHeight()) / 2 - 192
             );
 
-            GLFW.glfwMakeContextCurrent(MemoryUtil.NULL);
             GLFW.glfwShowWindow(window);
         } catch (Exception e) {
             e.printStackTrace();
@@ -64,9 +63,12 @@ public class EyeProjector {
                 try {
                     Thread.sleep(16);
                 } catch (InterruptedException e) {
+                    e.printStackTrace();
                     Thread.currentThread().interrupt();
                 }
             }
+
+            GLFW.glfwMakeContextCurrent(MemoryUtil.NULL);
         });
 
         projectorThread.setDaemon(true);
