@@ -2,6 +2,7 @@ package amathew4538.permissionlessresolutionchanger.mixin.client;
 
 import amathew4538.permissionlessresolutionchanger.PermissionlessResolutionChanger;
 import amathew4538.permissionlessresolutionchanger.ResolutionChanger;
+import amathew4538.permissionlessresolutionchanger.EyeProjector;
 import net.minecraft.client.MinecraftClient;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -16,6 +17,7 @@ public class MinecraftClientMixin {
             ResolutionChanger.setResolutionToBase();
         } else if (PermissionlessResolutionChanger.tallSizeKeybind.wasPressed()) {
             ResolutionChanger.setResolutionToTall();
+            EyeProjector.StartProjector();
         } else if (PermissionlessResolutionChanger.thinSizeKeybind.wasPressed()) {
             ResolutionChanger.setResolutionToThin();
         } else if (PermissionlessResolutionChanger.wideSizeKeybind.wasPressed()) {
