@@ -15,6 +15,7 @@ import java.nio.ByteBuffer;
 public class EyeProjector {
     private static long clientWindowHandle;
     private static long window;
+    public static int pboId;
 
     public static void StartProjector() {
         clientWindowHandle = MinecraftClient.getInstance().getWindow().getHandle();
@@ -49,7 +50,7 @@ public class EyeProjector {
             e.printStackTrace();
         }
 
-        int pboId = GL15.glGenBuffers();
+        pboId = GL15.glGenBuffers();
         GL15.glBindBuffer(GL21.GL_PIXEL_PACK_BUFFER, pboId);
 
         int bufferSize = 384 * 384 * 4;

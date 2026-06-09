@@ -37,7 +37,7 @@ public class EyeProjectorMixin {
         int readX = (fbWidth - 384) / 2;
         int readY = (fbHeight - 384) / 2;
 
-        GL15.glBindBuffer(GL21.GL_PIXEL_PACK_BUFFER, pboId);
+        GL15.glBindBuffer(GL21.GL_PIXEL_PACK_BUFFER, EyeProjector.pboId);
         GL11.glReadPixels(readX, readY, 384, 384, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, 0L);
         GL15.glBindBuffer(GL21.GL_PIXEL_PACK_BUFFER, 0);
 
