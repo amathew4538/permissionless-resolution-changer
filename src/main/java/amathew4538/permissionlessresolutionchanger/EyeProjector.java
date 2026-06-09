@@ -93,28 +93,24 @@ public class EyeProjector {
                 GL11.glViewport(0, 0, 384, 384);
                 GL11.glMatrixMode(GL11.GL_PROJECTION);
                 GL11.glLoadIdentity();
-                GL11.glOrtho(-1.0, 1.0, -1.0, 1.0, -1.0, 1.0);
+                GL11.glOrtho(0.0, 384.0, 0.0, 384.0, -1.0, 1.0);
 
                 GL11.glMatrixMode(GL11.GL_MODELVIEW);
                 GL11.glLoadIdentity();
 
                 double scaleY = ((double) fbHeight / (double) fbWidth);
+
+                GL11.glTranslatef(192.0f, 192.0f, 0.0f);
                 GL11.glScalef(1.0f, (float) scaleY, 1.0f);
+                GL11.glTranslatef(-192.0f, -192.0f, 0.0f);
 
                 GL11.glEnable(GL11.GL_TEXTURE_2D);
+                GL11.glBindTexture(GL11.GL_TEXTURE_2D, projectorTextureId);
                 GL11.glBegin(GL11.GL_QUADS);
-                    GL11.glTexCoord2f(0.0f, 0.0f);
-                    GL11.glVertex2f(-1.0f, -1.0f);
-
-                    GL11.glTexCoord2f(1.0f, 0.0f);
-                    GL11.glVertex2f(1.0f, -1.0f);
-
-                    GL11.glTexCoord2f(1.0f, 1.0f);
-                    GL11.glVertex2f(1.0f, 1.0f);
-
-                    GL11.glTexCoord2f(0.0f, 1.0f);
-                    GL11.glVertex2f(-1.0f, 1.0f);
-
+                    GL11.glTexCoord2f(0.0f, 0.0f); GL11.glVertex2f(0.0f, 0.0f);
+                    GL11.glTexCoord2f(1.0f, 0.0f); GL11.glVertex2f(384.0f, 0.0f);
+                    GL11.glTexCoord2f(1.0f, 1.0f); GL11.glVertex2f(384.0f, 384.0f);
+                    GL11.glTexCoord2f(0.0f, 1.0f); GL11.glVertex2f(0.0f, 384.0f);
                 GL11.glEnd();
                 GL11.glDisable(GL11.GL_TEXTURE_2D);
                 GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
