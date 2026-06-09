@@ -53,8 +53,7 @@ public class EyeProjector {
         pboId = GL15.glGenBuffers();
         GL15.glBindBuffer(GL21.GL_PIXEL_PACK_BUFFER, pboId);
 
-        int bufferSize = 384 * 384 * 4;
-        GL15.glBufferData(GL21.GL_PIXEL_PACK_BUFFER, bufferSize, GL15.GL_STREAM_READ);
+        GL15.glBufferData(GL21.GL_PIXEL_PACK_BUFFER, 2359296, GL15.GL_STREAM_READ);
         GL15.glBindBuffer(GL21.GL_PIXEL_PACK_BUFFER, 0);
         
         Thread projectorThread = new Thread(() -> {
@@ -69,7 +68,7 @@ public class EyeProjector {
                 GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST);
                 GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
 
-                GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA, 384, 384, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, (ByteBuffer) null);
+                GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA, 768, 768, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, (ByteBuffer) null);
                 GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
 
             } catch (Exception e) {
@@ -83,34 +82,34 @@ public class EyeProjector {
                 int fbWidth = MinecraftClient.getInstance().getWindow().getFramebufferWidth();
                 int fbHeight = MinecraftClient.getInstance().getWindow().getFramebufferHeight();
 
-                if (fbWidth <= 0) fbWidth = 384;
+                if (fbWidth <= 0) fbWidth = 768;
 
                 GL15.glBindBuffer(GL21.GL_PIXEL_UNPACK_BUFFER, pboId);
                 GL11.glBindTexture(GL11.GL_TEXTURE_2D, projectorTextureId);
-                GL11.glTexSubImage2D(GL11.GL_TEXTURE_2D, 0, 0, 0, 384, 384, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, 0L);
+                GL11.glTexSubImage2D(GL11.GL_TEXTURE_2D, 0, 0, 0, 768, 768, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, 0L);
                 GL15.glBindBuffer(GL21.GL_PIXEL_UNPACK_BUFFER, 0);
 
-                GL11.glViewport(0, 0, 384, 384);
+                GL11.glViewport(0, 0, 768, 768);
                 GL11.glMatrixMode(GL11.GL_PROJECTION);
                 GL11.glLoadIdentity();
-                GL11.glOrtho(0.0, 384.0, 0.0, 384.0, -1.0, 1.0);
+                GL11.glOrtho(0.0, 768.0, 0.0, 768.0, -1.0, 1.0);
 
                 GL11.glMatrixMode(GL11.GL_MODELVIEW);
                 GL11.glLoadIdentity();
 
-                double scaleY = ((double) fbHeight / (double) fbWidth);
+                double scaleX = ((double) fbHeight / (double) fbWidth);
 
-                GL11.glTranslatef(192.0f, 192.0f, 0.0f);
-                GL11.glScalef(1.0f, (float) scaleY, 1.0f);
-                GL11.glTranslatef(-192.0f, -192.0f, 0.0f);
+                GL11.glTranslatef(384.0f, 384.0f, 0.0f);
+                GL11.glScalef((float) scaleX, 1.0f, 1.0f);
+                GL11.glTranslatef(-384.0f, -384.0f, 0.0f);
 
                 GL11.glEnable(GL11.GL_TEXTURE_2D);
                 GL11.glBindTexture(GL11.GL_TEXTURE_2D, projectorTextureId);
                 GL11.glBegin(GL11.GL_QUADS);
                     GL11.glTexCoord2f(0.0f, 0.0f); GL11.glVertex2f(0.0f, 0.0f);
-                    GL11.glTexCoord2f(1.0f, 0.0f); GL11.glVertex2f(384.0f, 0.0f);
-                    GL11.glTexCoord2f(1.0f, 1.0f); GL11.glVertex2f(384.0f, 384.0f);
-                    GL11.glTexCoord2f(0.0f, 1.0f); GL11.glVertex2f(0.0f, 384.0f);
+                    GL11.glTexCoord2f(1.0f, 0.0f); GL11.glVertex2f(768.0f, 0.0f);
+                    GL11.glTexCoord2f(1.0f, 1.0f); GL11.glVertex2f(768.0f, 768.0f);
+                    GL11.glTexCoord2f(0.0f, 1.0f); GL11.glVertex2f(0.0f, 768.0f);
                 GL11.glEnd();
                 GL11.glDisable(GL11.GL_TEXTURE_2D);
                 GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
