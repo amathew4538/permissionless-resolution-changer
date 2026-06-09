@@ -107,10 +107,10 @@ public class EyeProjector {
                 GL11.glMatrixMode(GL11.GL_MODELVIEW);
                 GL11.glLoadIdentity();
 
-                double scaleX = ((double) fbHeight / (double) fbWidth) * (windowWidth / 384) * 2;
+                double scaleX = ((double) fbHeight / (double) fbWidth) * (windowWidth / 384);
 
                 GL11.glTranslatef(384.0f, 384.0f, 0.0f);
-                GL11.glScalef((float) scaleX, 2.0f, 1.0f);
+                GL11.glScalef((float) scaleX, 1.0f, 1.0f);
                 GL11.glTranslatef(-384.0f, -384.0f, 0.0f);
 
                 GL11.glEnable(GL11.GL_TEXTURE_2D);
