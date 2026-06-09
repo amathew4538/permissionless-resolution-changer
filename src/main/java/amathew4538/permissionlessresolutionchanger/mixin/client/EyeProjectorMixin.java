@@ -34,10 +34,11 @@ public class EyeProjectorMixin {
             Thread monitorThread = new Thread(() -> {
                 try {
                     int targetDPI = Integer.parseInt(ResolutionChanger.getDPI());
+                    int scale = Integer.parseInt(ResolutionChanger.getScreenScale());
                     while (ResolutionChanger.isTallChanging) {
                         MinecraftClient client = MinecraftClient.getInstance();
 
-                        if (client.getWindow().getFramebufferHeight() == targetDPI) {
+                        if (client.getWindow().getFramebufferHeight() == scale * targetDPI) {
                             ResolutionChanger.isTallChanging = false;
 
                             client.execute(() -> {

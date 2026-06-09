@@ -202,7 +202,7 @@ public class ResolutionChanger {
     // Read-only getters
     public static String getScreenWidth() { return screenWidth; }
     public static String getScreenHeight() { return screenHeight; }
-    public static String getscreenScale() { return screenScale; }
+    public static String getScreenScale() { return screenScale; }
     public static String getDPI() { return dpi; }
     public static String getPort() { return port; }
 }

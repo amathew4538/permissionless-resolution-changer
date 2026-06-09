@@ -34,11 +34,12 @@ public class EyeProjector {
         try {
             GLFW.glfwSetWindowPos(
                 window,
-                (Integer.parseInt(ResolutionChanger.getScreenWidth()) / 2 - 192) / 2 - 192,
+                Integer.parseInt(ResolutionChanger.getScreenWidth()) / 2 - 576,
                 Integer.parseInt(ResolutionChanger.getScreenHeight()) / 2 - 192
             );
 
             GLFW.glfwShowWindow(window);
+            System.out.println("Window created");
         } catch (Exception e) {
             e.printStackTrace();
         }
