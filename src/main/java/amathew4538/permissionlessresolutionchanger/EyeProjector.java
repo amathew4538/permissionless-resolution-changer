@@ -50,6 +50,15 @@ public class EyeProjector {
             e.printStackTrace();
         }
 
+        try (MemoryStack stack = MemoryStack.stackPush()) {
+            IntBuffer pWidth = stack.mallocInt(1);
+            IntBuffer pHeight = stack.mallocInt(1);
+
+            GLFW.glfwGetWindowSize(windowHandle, pWidth, pHeight);
+
+            int windowWidth = pWidth.get(0);
+        }
+
         pboId = GL15.glGenBuffers();
         GL15.glBindBuffer(GL21.GL_PIXEL_PACK_BUFFER, pboId);
 
@@ -97,10 +106,10 @@ public class EyeProjector {
                 GL11.glMatrixMode(GL11.GL_MODELVIEW);
                 GL11.glLoadIdentity();
 
-                double scaleX = ((double) fbHeight / (double) fbWidth);
+                double scaleX = ((double) fbHeight / (double) fbWidth) * (windowWidth / 384) * 2;
 
                 GL11.glTranslatef(384.0f, 384.0f, 0.0f);
-                GL11.glScalef((float) scaleX, 1.0f, 1.0f);
+                GL11.glScalef((float) scaleX, 2.0f, 1.0f);
                 GL11.glTranslatef(-384.0f, -384.0f, 0.0f);
 
                 GL11.glEnable(GL11.GL_TEXTURE_2D);
