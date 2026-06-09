@@ -31,15 +31,17 @@ public class EyeProjectorMixin {
     private void OnClientTick(CallbackInfo ci) {
         GLFW.glfwPollEvents();
 
-        int fbWidth = MinecraftClient.getInstance().getWindow().getFramebufferWidth();
-        int fbHeight = MinecraftClient.getInstance().getWindow().getFramebufferHeight();
+        if (EyeProjector.pboId != 0) {
+            int fbWidth = MinecraftClient.getInstance().getWindow().getFramebufferWidth();
+            int fbHeight = MinecraftClient.getInstance().getWindow().getFramebufferHeight();
 
-        int readX = (fbWidth - 384) / 2;
-        int readY = (fbHeight - 384) / 2;
+            int readX = (fbWidth - 384) / 2;
+            int readY = (fbHeight - 384) / 2;
 
-        GL15.glBindBuffer(GL21.GL_PIXEL_PACK_BUFFER, EyeProjector.pboId);
-        GL11.glReadPixels(readX, readY, 384, 384, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, 0L);
-        GL15.glBindBuffer(GL21.GL_PIXEL_PACK_BUFFER, 0);
+            GL15.glBindBuffer(GL21.GL_PIXEL_PACK_BUFFER, EyeProjector.pboId);
+            GL11.glReadPixels(readX, readY, 384, 384, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, 0L);
+            GL15.glBindBuffer(GL21.GL_PIXEL_PACK_BUFFER, 0);
+        }
 
         if (ResolutionChanger.isTallChanging && !isWaiting) {
             isWaiting = true;
