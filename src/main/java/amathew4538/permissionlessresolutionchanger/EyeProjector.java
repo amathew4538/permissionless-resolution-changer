@@ -15,6 +15,7 @@ import java.nio.ByteBuffer;
 public class EyeProjector {
     private static long clientWindowHandle;
     private static long window;
+    private static int windowWidth;
     public static int pboId;
 
     public static void StartProjector() {
@@ -56,7 +57,7 @@ public class EyeProjector {
 
             GLFW.glfwGetWindowSize(window, pWidth, pHeight);
 
-            int windowWidth = pWidth.get(0);
+            windowWidth = pWidth.get(0);
         }
 
         pboId = GL15.glGenBuffers();
