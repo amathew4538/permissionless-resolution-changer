@@ -22,21 +22,44 @@ import org.lwjgl.glfw.GLFW;
 
 @Mixin(MinecraftClient.class)
 public class EyeProjectorMixin {
+    private static boolean isWaiting = false;
+
     @Inject(method = "tick", at = @At("HEAD"))
     private void OnClientTick(CallbackInfo ci) {
         GLFW.glfwPollEvents();
 
-        while (ResolutionChanger.isTallChanging) {
-            if (MinecraftClient.getInstance().getWindow().getFramebufferHeight() == Integer.parseInt(ResolutionChanger.getDPI())) {
-                ResolutionChanger.isTallChanging = false;
-                EyeProjector.StartProjector();
-            }
-            try {
-                Thread.sleep(16);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-                Thread.currentThread().interrupt();
-            }
+        if (ResolutionChanger.isTallChanging && !isWaiting) {
+            isWaiting = true;
+
+            Thread monitorThread = new Thread(() -> {
+                try {
+                    int targetDPI = Integer.parseInt(ResolutionChanger.getDPI());
+                    while (ResolutionChanger.isTallChanging) {
+                        MinecraftClient client = MinecraftClient.getInstance();
+
+                        if (client.getWindow().getFramebufferHeight() == targetDPI) {
+                            ResolutionChanger.isTallChanging = false;
+
+                            client.execute(() -> {
+                                EyeProjector.StartProjector();
+                            });
+
+                            break;
+                        }
+
+                        Thread.sleep(16);
+                    }
+                } catch (NumberFormatException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                } finally {
+                    isWaiting = false;
+                }
+            });
+
+            monitorThread.setDaemon(true);
+            monitorThread.start();
         }
     }
 }
