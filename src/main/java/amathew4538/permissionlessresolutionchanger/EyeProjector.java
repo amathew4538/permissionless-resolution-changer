@@ -54,7 +54,7 @@ public class EyeProjector {
             IntBuffer pWidth = stack.mallocInt(1);
             IntBuffer pHeight = stack.mallocInt(1);
 
-            GLFW.glfwGetWindowSize(windowHandle, pWidth, pHeight);
+            GLFW.glfwGetWindowSize(window, pWidth, pHeight);
 
             int windowWidth = pWidth.get(0);
         }
