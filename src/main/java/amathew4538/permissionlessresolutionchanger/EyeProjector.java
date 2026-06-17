@@ -72,6 +72,10 @@ public class EyeProjector {
 
         Thread projectorThread = new Thread(() -> {
             int projectorTextureId = 0;
+            int overlayTextureId = 0;
+            int overlayWidth = 1;
+            int overlayHeight = 1;
+            
             try {
                 GLFW.glfwMakeContextCurrent(window);
                 GL.createCapabilities();
