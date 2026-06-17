@@ -75,7 +75,7 @@ public class EyeProjector {
             int overlayTextureId = 0;
             int overlayWidth = 1;
             int overlayHeight = 1;
-            
+
             try {
                 GLFW.glfwMakeContextCurrent(window);
                 GL.createCapabilities();
@@ -103,8 +103,22 @@ public class EyeProjector {
                         GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
                         GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
 
-                        GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA, overlayWidth, overlayHeight, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, nativeImage.getPointer());
+                        ByteBuffer buffer = MemoryUtil.memAlloc(overlayWidth * overlayHeight * 4);
+                        for (int y = 0; y < overlayHeight; y++) {
+                            for (int x = 0; x < overlayWidth; x++) {
+                                int pixel = nativeImage.getColor(x, y);
+                                buffer.put((byte) (pixel & 0xFF));
+                                buffer.put((byte) ((pixel >> 8) & 0xFF));
+                                buffer.put((byte) ((pixel >> 16) & 0xFF));
+                                buffer.put((byte) ((pixel >> 24) & 0xFF));
+                            }
+                        }
+                        buffer.flip();
+
+                        GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA, overlayWidth, overlayHeight, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer);
                         GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
+                        
+                        MemoryUtil.memFree(buffer);
                     }
                 } catch (IOException e) {
                     System.err.println("Failed to load tall_overlay.png asset");
@@ -136,6 +150,8 @@ public class EyeProjector {
 
                 GL11.glMatrixMode(GL11.GL_MODELVIEW);
                 GL11.glLoadIdentity();
+
+                GL11.glPushMatrix();
 
                 // double scaleX = ((double) fbHeight / (double) fbWidth) * (windowWidth / 384);
 
