@@ -182,10 +182,10 @@ public class EyeProjector {
 
                 GL11.glPushMatrix();
 
-                // double scaleX = ((double) fbHeight / (double) fbWidth) * (windowWidth / 384);
+                double scaleX = ((double) fbHeight / (double) fbWidth) * (windowWidth / 384);
 
                 GL11.glTranslatef(384.0f, 384.0f, 0.0f);
-                GL11.glScalef(1.0f, 6.0f, 1.0f);
+                GL11.glScalef((float) scaleX, 6.0f, 1.0f);
                 GL11.glTranslatef(-384.0f, -384.0f, 0.0f);
 
                 GL11.glEnable(GL11.GL_TEXTURE_2D);
@@ -219,10 +219,10 @@ public class EyeProjector {
                     float yOffset = (viewSize - renderHeight) / 2.0f;
 
                     GL11.glBegin(GL11.GL_QUADS);
-                        GL11.glTexCoord2f(0.0f, 0.0f); GL11.glVertex2f(xOffset, yOffset);
-                        GL11.glTexCoord2f(1.0f, 0.0f); GL11.glVertex2f(xOffset + renderWidth, yOffset);
-                        GL11.glTexCoord2f(1.0f, 1.0f); GL11.glVertex2f(xOffset + renderWidth, yOffset + renderHeight);
-                        GL11.glTexCoord2f(0.0f, 1.0f); GL11.glVertex2f(xOffset, yOffset + renderHeight);
+                        GL11.glTexCoord2f(0.0f, 1.0f); GL11.glVertex2f(xOffset, yOffset);
+                        GL11.glTexCoord2f(1.0f, 1.0f); GL11.glVertex2f(xOffset + renderWidth, yOffset);
+                        GL11.glTexCoord2f(1.0f, 0.0f); GL11.glVertex2f(xOffset + renderWidth, yOffset + renderHeight);
+                        GL11.glTexCoord2f(0.0f, 0.0f); GL11.glVertex2f(xOffset, yOffset + renderHeight);
                     GL11.glEnd();
 
                     GL11.glDisable(GL11.GL_BLEND);
