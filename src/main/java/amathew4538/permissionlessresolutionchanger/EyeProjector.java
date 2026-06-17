@@ -22,6 +22,18 @@ public class EyeProjector {
     private static int windowWidth;
     public static int pboId;
 
+    private static class LoadedOverlay {
+        public int textureId;
+        public int width;
+        public int height;
+
+        public LoadedOverlay(int textureId, int width, int height) {
+            this.textureId = textureId;
+            this.width = width;
+            this.height = height;
+        }
+    }
+
     public static void StartProjector() {
         clientWindowHandle = MinecraftClient.getInstance().getWindow().getHandle();
 
@@ -89,40 +101,54 @@ public class EyeProjector {
                 GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA, 768, 768, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, (ByteBuffer) null);
                 GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
 
-                try {
-                    Identifier overlayIdentifier = new Identifier("permissionless-resolution-changer", "textures/gui/overlay/tall_overlay.png");
-                    Resource resource = MinecraftClient.getInstance().getResourceManager().getResource(overlayIdentifier);
-                    
-                    try (NativeImage nativeImage = NativeImage.read(resource.getInputStream())) {
-                        overlayWidth = nativeImage.getWidth();
-                        overlayHeight = nativeImage.getHeight();
-                        
-                        overlayTextureId = GL11.glGenTextures();
-                        GL11.glBindTexture(GL11.GL_TEXTURE_2D, overlayTextureId);
-                        
-                        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
-                        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
+                ResourceManager resourceManager = MinecraftClient.getInstance().getResourceManager();
+                Identifier overlayId = new Identifier("permissionless-resolution-changer", "textures/gui/overlay/tall_overlay.png");
 
-                        ByteBuffer buffer = MemoryUtil.memAlloc(overlayWidth * overlayHeight * 4);
-                        for (int y = 0; y < overlayHeight; y++) {
-                            for (int x = 0; x < overlayWidth; x++) {
-                                int pixel = nativeImage.getColor(x, y);
-                                buffer.put((byte) (pixel & 0xFF));
-                                buffer.put((byte) ((pixel >> 8) & 0xFF));
-                                buffer.put((byte) ((pixel >> 16) & 0xFF));
-                                buffer.put((byte) ((pixel >> 24) & 0xFF));
+                do {
+                    try {
+                        Resource resource = resourceManager.getResource(overlayId);
+                        try (NativeImage nativeImage = NativeImage.read(resource.getInputStream())) {
+                            int overlayWidth = nativeImage.getWidth();
+                            int overlayHeight = nativeImage.getHeight();
+                            
+                            int overlayTextureId = GL11.glGenTextures();
+                            GL11.glBindTexture(GL11.GL_TEXTURE_2D, overlayTextureId);
+                            
+                            GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
+                            GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
+
+                            ByteBuffer buffer = MemoryUtil.memAlloc(overlayWidth * overlayHeight * 4);
+                            for (int y = 0; y < overlayHeight; y++) {
+                                for (int x = 0; x < overlayWidth; x++) {
+                                    int pixel = nativeImage.getColor(x, y);
+                                    buffer.put((byte) (pixel & 0xFF));
+                                    buffer.put((byte) ((pixel >> 8) & 0xFF));
+                                    buffer.put((byte) ((pixel >> 16) & 0xFF));
+                                    buffer.put((byte) ((pixel >> 24) & 0xFF));
+                                }
                             }
-                        }
-                        buffer.flip();
+                            buffer.flip();
 
-                        GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA, overlayWidth, overlayHeight, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer);
-                        GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
-                        
-                        MemoryUtil.memFree(buffer);
+                            GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA, overlayWidth, overlayHeight, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer);
+                            GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
+                            
+                            MemoryUtil.memFree(buffer);
+
+                            activeOverlays.add(new LoadedOverlay(overlayTextureId, overlayWidth, overlayHeight));
+                        }
+                    } catch (IOException e) {
+                        System.err.println("Failed to read overlay image texture: " + overlayId);
+                        e.printStackTrace();
                     }
-                } catch (IOException e) {
-                    System.err.println("Failed to load tall_overlay.png asset");
-                    e.printStackTrace();
+
+                    String nextPath = "textures/gui/overlay/tall_overlay-" + activeOverlays.size() + ".png";
+                    overlayId = new Identifier("permissionless-resolution-changer", nextPath);
+
+                } while (resourceManager.containsResource(overlayId));
+
+                if (!activeOverlays.isEmpty()) {
+                    Random rand = new Random();
+                    chosenOverlay = activeOverlays.get(rand.nextInt(activeOverlays.isEmpty() ? 1 : activeOverlays.size()));
                 }
 
             } catch (Exception e) {
@@ -169,8 +195,8 @@ public class EyeProjector {
                 GL11.glEnd();
                 GL11.glPopMatrix();
 
-                if (overlayTextureId != 0) {
-                    GL11.glBindTexture(GL11.GL_TEXTURE_2D, overlayTextureId);
+                if (chosenOverlay != null && chosenOverlay.textureId != 0) {
+                    GL11.glBindTexture(GL11.GL_TEXTURE_2D, chosenOverlay.textureId);
 
                     GL11.glEnable(GL11.GL_BLEND);
                     GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
@@ -179,7 +205,7 @@ public class EyeProjector {
                     float renderWidth = viewSize;
                     float renderHeight = viewSize;
 
-                    float imageAspect = (float) overlayWidth / (float) overlayHeight;
+                    float imageAspect = (float) chosenOverlay.width / (float) chosenOverlay.height;
                     if (imageAspect > 1.0f) {
                         renderHeight = viewSize / imageAspect;
                     } else {
@@ -214,8 +240,10 @@ public class EyeProjector {
             if (projectorTextureId != 0) {
                 GL11.glDeleteTextures(projectorTextureId);
             }
-            if (overlayTextureId != 0) {
-                GL11.glDeleteTextures(overlayTextureId);
+            for (LoadedOverlay overlay : activeOverlays) {
+                if (overlay.textureId != 0) {
+                    GL11.glDeleteTextures(overlay.textureId);
+                }
             }
             GLFW.glfwMakeContextCurrent(MemoryUtil.NULL);
         });
