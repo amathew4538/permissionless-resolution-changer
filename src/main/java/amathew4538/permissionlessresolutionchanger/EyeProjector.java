@@ -6,11 +6,15 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL21;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.texture.NativeImage;
+import net.minecraft.resource.Resource;
+import net.minecraft.util.Identifier;
 import org.lwjgl.system.MemoryUtil;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.system.MemoryStack;
 import java.nio.IntBuffer;
 import java.nio.ByteBuffer;
+import java.io.IOException;
 
 public class EyeProjector {
     private static long clientWindowHandle;
@@ -81,6 +85,28 @@ public class EyeProjector {
                 GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA, 768, 768, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, (ByteBuffer) null);
                 GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
 
+                try {
+                    Identifier overlayIdentifier = new Identifier("permissionless-resolution-changer", "textures/gui/overlay/tall_overlay.png");
+                    Resource resource = MinecraftClient.getInstance().getResourceManager().getResource(overlayIdentifier);
+                    
+                    try (NativeImage nativeImage = NativeImage.read(resource.getInputStream())) {
+                        overlayWidth = nativeImage.getWidth();
+                        overlayHeight = nativeImage.getHeight();
+                        
+                        overlayTextureId = GL11.glGenTextures();
+                        GL11.glBindTexture(GL11.GL_TEXTURE_2D, overlayTextureId);
+                        
+                        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
+                        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
+
+                        GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA, overlayWidth, overlayHeight, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, nativeImage.getPointer());
+                        GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
+                    }
+                } catch (IOException e) {
+                    System.err.println("Failed to load tall_overlay.png asset");
+                    e.printStackTrace();
+                }
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -107,10 +133,10 @@ public class EyeProjector {
                 GL11.glMatrixMode(GL11.GL_MODELVIEW);
                 GL11.glLoadIdentity();
 
-                double scaleX = ((double) fbHeight / (double) fbWidth) * (windowWidth / 384);
+                // double scaleX = ((double) fbHeight / (double) fbWidth) * (windowWidth / 384);
 
                 GL11.glTranslatef(384.0f, 384.0f, 0.0f);
-                GL11.glScalef((float) scaleX, 6.0f, 1.0f);
+                GL11.glScalef(1.0f, 6.0f, 1.0f);
                 GL11.glTranslatef(-384.0f, -384.0f, 0.0f);
 
                 GL11.glEnable(GL11.GL_TEXTURE_2D);
@@ -121,6 +147,38 @@ public class EyeProjector {
                     GL11.glTexCoord2f(0.5390625f, 1.0f); GL11.glVertex2f(768.0f, 768.0f);
                     GL11.glTexCoord2f(0.4609375f, 1.0f); GL11.glVertex2f(0.0f, 768.0f);
                 GL11.glEnd();
+                GL11.glPopMatrix();
+
+                if (overlayTextureId != 0) {
+                    GL11.glBindTexture(GL11.GL_TEXTURE_2D, overlayTextureId);
+
+                    GL11.glEnable(GL11.GL_BLEND);
+                    GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+
+                    float viewSize = 768.0f;
+                    float renderWidth = viewSize;
+                    float renderHeight = viewSize;
+
+                    float imageAspect = (float) overlayWidth / (float) overlayHeight;
+                    if (imageAspect > 1.0f) {
+                        renderHeight = viewSize / imageAspect;
+                    } else {
+                        renderWidth = viewSize * imageAspect;
+                    }
+
+                    float xOffset = (viewSize - renderWidth) / 2.0f;
+                    float yOffset = (viewSize - renderHeight) / 2.0f;
+
+                    GL11.glBegin(GL11.GL_QUADS);
+                        GL11.glTexCoord2f(0.0f, 0.0f); GL11.glVertex2f(xOffset, yOffset);
+                        GL11.glTexCoord2f(1.0f, 0.0f); GL11.glVertex2f(xOffset + renderWidth, yOffset);
+                        GL11.glTexCoord2f(1.0f, 1.0f); GL11.glVertex2f(xOffset + renderWidth, yOffset + renderHeight);
+                        GL11.glTexCoord2f(0.0f, 1.0f); GL11.glVertex2f(xOffset, yOffset + renderHeight);
+                    GL11.glEnd();
+
+                    GL11.glDisable(GL11.GL_BLEND);
+                }
+
                 GL11.glDisable(GL11.GL_TEXTURE_2D);
                 GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
 
@@ -135,6 +193,9 @@ public class EyeProjector {
 
             if (projectorTextureId != 0) {
                 GL11.glDeleteTextures(projectorTextureId);
+            }
+            if (overlayTextureId != 0) {
+                GL11.glDeleteTextures(overlayTextureId);
             }
             GLFW.glfwMakeContextCurrent(MemoryUtil.NULL);
         });
