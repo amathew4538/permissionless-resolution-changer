@@ -8,6 +8,7 @@ import org.lwjgl.opengl.GL21;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.texture.NativeImage;
 import net.minecraft.resource.Resource;
+import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
 import org.lwjgl.system.MemoryUtil;
 import org.lwjgl.glfw.GLFWErrorCallback;
@@ -15,6 +16,9 @@ import org.lwjgl.system.MemoryStack;
 import java.nio.IntBuffer;
 import java.nio.ByteBuffer;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 public class EyeProjector {
     private static long clientWindowHandle;
