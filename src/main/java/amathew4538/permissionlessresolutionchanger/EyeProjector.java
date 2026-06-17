@@ -88,9 +88,8 @@ public class EyeProjector {
 
         Thread projectorThread = new Thread(() -> {
             int projectorTextureId = 0;
-            int overlayTextureId = 0;
-            int overlayWidth = 1;
-            int overlayHeight = 1;
+            List<LoadedOverlay> activeOverlays = new ArrayList<>();
+            LoadedOverlay chosenOverlay = null;
 
             try {
                 GLFW.glfwMakeContextCurrent(window);
@@ -124,7 +123,7 @@ public class EyeProjector {
                             ByteBuffer buffer = MemoryUtil.memAlloc(overlayWidth * overlayHeight * 4);
                             for (int y = 0; y < overlayHeight; y++) {
                                 for (int x = 0; x < overlayWidth; x++) {
-                                    int pixel = nativeImage.getColor(x, y);
+                                    int pixel = nativeImage.getPixelColor(x, y);
                                     buffer.put((byte) (pixel & 0xFF));
                                     buffer.put((byte) ((pixel >> 8) & 0xFF));
                                     buffer.put((byte) ((pixel >> 16) & 0xFF));
