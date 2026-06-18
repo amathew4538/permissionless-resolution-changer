@@ -183,11 +183,11 @@ public class EyeProjector {
 
                 GL11.glPushMatrix();
 
-                double scaleX = ((double) fbHeight / (double) fbWidth) * (windowWidth / 384);
+                double scaleY = 0.2 * screenScale * (windowWidth / 384);
 
-                GL11.glTranslatef(192.0f * screenScale, 192.0f * screenScale, 0.0f);
-                GL11.glScalef((float) scaleX, 1.0f, 1.0f);
-                GL11.glTranslatef(-192.0f * screenScale, -192.0f * screenScale, 0.0f);
+                GL11.glTranslatef(384.0f, 384.0f, 0.0f);
+                GL11.glScalef(1.0f, (float) scaleY, 1.0f);
+                GL11.glTranslatef(-384.0f, -384.0f, 0.0f);
 
                 GL11.glEnable(GL11.GL_TEXTURE_2D);
                 GL11.glBindTexture(GL11.GL_TEXTURE_2D, projectorTextureId);
