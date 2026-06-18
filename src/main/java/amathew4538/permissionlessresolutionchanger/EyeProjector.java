@@ -24,6 +24,7 @@ public class EyeProjector {
     private static long clientWindowHandle;
     private static long window;
     private static int windowWidth;
+    private static int screenScale = Integer.parseInt(ResolutionChanger.getScreenScale());
     public static int pboId;
 
     private static class LoadedOverlay {
@@ -61,7 +62,7 @@ public class EyeProjector {
         try {
             GLFW.glfwSetWindowPos(
                 window,
-                Integer.parseInt(ResolutionChanger.getScreenWidth()) / 2 - 768,
+                Integer.parseInt(ResolutionChanger.getScreenWidth()) / 2 - 384,
                 Integer.parseInt(ResolutionChanger.getScreenHeight()) / 2 - 192
             );
 
@@ -101,7 +102,7 @@ public class EyeProjector {
                 GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST);
                 GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
 
-                GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA, 768, 768, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, (ByteBuffer) null);
+                GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA, 384 * screenScale, 384 * screenScale, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, (ByteBuffer) null);
                 GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
 
                 ResourceManager resourceManager = MinecraftClient.getInstance().getResourceManager();
@@ -165,17 +166,17 @@ public class EyeProjector {
                 int fbWidth = MinecraftClient.getInstance().getWindow().getFramebufferWidth();
                 int fbHeight = MinecraftClient.getInstance().getWindow().getFramebufferHeight();
 
-                if (fbWidth <= 0) fbWidth = 768;
+                if (fbWidth <= 0) fbWidth = 384 * screenScale;
 
                 GL15.glBindBuffer(GL21.GL_PIXEL_UNPACK_BUFFER, pboId);
                 GL11.glBindTexture(GL11.GL_TEXTURE_2D, projectorTextureId);
-                GL11.glTexSubImage2D(GL11.GL_TEXTURE_2D, 0, 0, 0, 768, 768, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, 0L);
+                GL11.glTexSubImage2D(GL11.GL_TEXTURE_2D, 0, 0, 0, 384 * screenScale, 384 * screenScale, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, 0L);
                 GL15.glBindBuffer(GL21.GL_PIXEL_UNPACK_BUFFER, 0);
 
-                GL11.glViewport(0, 0, 768, 768);
+                GL11.glViewport(0, 0, 384 * screenScale, 384 * screenScale);
                 GL11.glMatrixMode(GL11.GL_PROJECTION);
                 GL11.glLoadIdentity();
-                GL11.glOrtho(0.0, 768.0, 0.0, 768.0, -1.0, 1.0);
+                GL11.glOrtho(0.0, 384.0 * screenScale, 0.0, 384.0 * screenScale, -1.0, 1.0);
 
                 GL11.glMatrixMode(GL11.GL_MODELVIEW);
                 GL11.glLoadIdentity();
@@ -184,17 +185,17 @@ public class EyeProjector {
 
                 double scaleX = ((double) fbHeight / (double) fbWidth) * (windowWidth / 384);
 
-                GL11.glTranslatef(384.0f, 384.0f, 0.0f);
+                GL11.glTranslatef(192.0f * screenScale, 192.0f * screenScale, 0.0f);
                 GL11.glScalef((float) scaleX, 1.0f, 1.0f);
-                GL11.glTranslatef(-384.0f, -384.0f, 0.0f);
+                GL11.glTranslatef(-192.0f * screenScale, -192.0f * screenScale, 0.0f);
 
                 GL11.glEnable(GL11.GL_TEXTURE_2D);
                 GL11.glBindTexture(GL11.GL_TEXTURE_2D, projectorTextureId);
                 GL11.glBegin(GL11.GL_QUADS);
-                    GL11.glTexCoord2f(0.4609375f, 0.4609375f); GL11.glVertex2f(0.0f, 0.0f);
-                    GL11.glTexCoord2f(0.5390625f, 0.4609375f); GL11.glVertex2f(768.0f, 0.0f);
-                    GL11.glTexCoord2f(0.5390625f, 0.5390625f); GL11.glVertex2f(768.0f, 768.0f);
-                    GL11.glTexCoord2f(0.4609375f, 0.5390625f); GL11.glVertex2f(0.0f, 768.0f);
+                    GL11.glTexCoord2f(0.4609375f * screenScale, 0.4609375f * screenScale); GL11.glVertex2f(0.0f, 0.0f);
+                    GL11.glTexCoord2f(0.5390625f * screenScale, 0.4609375f * screenScale); GL11.glVertex2f(384.0f * screenScale, 0.0f);
+                    GL11.glTexCoord2f(0.5390625f * screenScale, 0.5390625f * screenScale); GL11.glVertex2f(384.0f * screenScale, 384.0f * screenScale);
+                    GL11.glTexCoord2f(0.4609375f * screenScale, 0.5390625f * screenScale); GL11.glVertex2f(0.0f, 384.0f * screenScale);
                 GL11.glEnd();
                 GL11.glPopMatrix();
 
@@ -204,7 +205,7 @@ public class EyeProjector {
                     GL11.glEnable(GL11.GL_BLEND);
                     GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
-                    float viewSize = 768.0f;
+                    float viewSize = 384.0f * screenScale;
                     float renderWidth = viewSize;
                     float renderHeight = viewSize;
 
