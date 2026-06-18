@@ -187,10 +187,10 @@ public class EyeProjector {
                 GL11.glEnable(GL11.GL_TEXTURE_2D);
                 GL11.glBindTexture(GL11.GL_TEXTURE_2D, projectorTextureId);
                 GL11.glBegin(GL11.GL_QUADS);
-                    GL11.glTexCoord2f(0.4609375f, 0.4609375f); GL11.glVertex2f(0.0f, 0.0f);
-                    GL11.glTexCoord2f(0.5390625f, 0.4609375f); GL11.glVertex2f(768.0f, 0.0f);
-                    GL11.glTexCoord2f(0.5390625f, 0.5390625f); GL11.glVertex2f(768.0f, 768.0f);
-                    GL11.glTexCoord2f(0.4609375f, 0.5390625f); GL11.glVertex2f(0.0f, 768.0f);
+                    GL11.glTexCoord2f(0.4609375f, 0.0f); GL11.glVertex2f(0.0f, 0.0f);
+                    GL11.glTexCoord2f(0.5390625f, 0.0f); GL11.glVertex2f(768.0f, 0.0f);
+                    GL11.glTexCoord2f(0.5390625f, 1.0f); GL11.glVertex2f(768.0f, 768.0f);
+                    GL11.glTexCoord2f(0.4609375f, 1.0f); GL11.glVertex2f(0.0f, 768.0f);
                 GL11.glEnd();
                 GL11.glEnd();
                 GL11.glPopMatrix();
