@@ -71,7 +71,7 @@ public class EyeProjectorMixin {
 
         if (EyeProjector.pboId != 0) {
             GL15.glBindBuffer(GL21.GL_PIXEL_PACK_BUFFER, EyeProjector.pboId);
-            GL11.glReadPixels(0, 0, 384 * screenScale, 16384, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, 0L);
+            GL11.glReadPixels(0, 0, 384 * ResolutionChanger.getScreenScale(), 16384, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, 0L);
             GL15.glBindBuffer(GL21.GL_PIXEL_PACK_BUFFER, 0);
         }
     }
