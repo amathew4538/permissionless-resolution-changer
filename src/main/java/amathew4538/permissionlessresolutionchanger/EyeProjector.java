@@ -86,6 +86,9 @@ public class EyeProjector {
         pboId = GL15.glGenBuffers();
         GL15.glBindBuffer(GL21.GL_PIXEL_PACK_BUFFER, pboId);
 
+        fbWidth = MinecraftClient.getInstance().getWindow().getFramebufferWidth();
+        fbHeight = MinecraftClient.getInstance().getWindow().getFramebufferHeight();
+
         GL15.glBufferData(GL21.GL_PIXEL_PACK_BUFFER, 50331648, GL15.GL_STREAM_READ);
         GL15.glBindBuffer(GL21.GL_PIXEL_PACK_BUFFER, 0);
 
@@ -165,12 +168,19 @@ public class EyeProjector {
                 GL11.glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
                 GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 
-                fbWidth = MinecraftClient.getInstance().getWindow().getFramebufferWidth();
-                fbHeight = MinecraftClient.getInstance().getWindow().getFramebufferHeight();
+                int currentFbWidth = MinecraftClient.getInstance().getWindow().getFramebufferWidth();
+                int currentFbHeight = MinecraftClient.getInstance().getWindow().getFramebufferHeight();
 
                 GL15.glBindBuffer(GL21.GL_PIXEL_UNPACK_BUFFER, pboId);
                 GL11.glBindTexture(GL11.GL_TEXTURE_2D, projectorTextureId);
-                GL11.glTexSubImage2D(GL11.GL_TEXTURE_2D, 0, 0, 0, fbWidth, fbHeight, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, 0L);
+
+                if (currentFbWidth != fbWidth || currentFbHeight != fbHeight) {
+                    fbWidth = currentFbWidth;
+                    fbHeight = currentFbHeight;
+                    GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA, fbWidth, fbHeight, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, (ByteBuffer) null);
+                }
+
+                GL11.glTexSubImage2D(GL11.GL_TEXTURE_2D, 0, 0, 0, currentFbWidth, currentFbHeight, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, 0L);
                 GL15.glBindBuffer(GL21.GL_PIXEL_UNPACK_BUFFER, 0);
 
                 GL11.glViewport(0, 0, 384 * screenScale, 384 * screenScale);
