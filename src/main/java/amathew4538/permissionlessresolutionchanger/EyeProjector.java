@@ -193,7 +193,7 @@ public class EyeProjector {
 
                 GL11.glPushMatrix();
 
-                double scaleY = 0.2 * screenScale * (60 / 384);
+                double scaleY = 0.2 * screenScale * (60.0f / 384.0f);
 
                 GL11.glTranslatef(384.0f, 384.0f, 0.0f);
                 GL11.glScalef(1.0f, (float) scaleY, 1.0f);
