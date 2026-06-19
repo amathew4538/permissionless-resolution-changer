@@ -25,6 +25,8 @@ public class EyeProjector {
     private static long window;
     private static int windowWidth;
     private static int screenScale = Integer.parseInt(ResolutionChanger.getScreenScale());
+    private static int fbHeight;
+    private static int fbWidth;
     public static int pboId;
 
     private static class LoadedOverlay {
@@ -84,12 +86,7 @@ public class EyeProjector {
         pboId = GL15.glGenBuffers();
         GL15.glBindBuffer(GL21.GL_PIXEL_PACK_BUFFER, pboId);
 
-        int fbWidth = MinecraftClient.getInstance().getWindow().getFramebufferWidth();
-        int fbHeight = MinecraftClient.getInstance().getWindow().getFramebufferHeight();
-
-        int bufferSize = fbWidth * fbHeight * 4;
-
-        GL15.glBufferData(GL21.GL_PIXEL_PACK_BUFFER, bufferSize, GL15.GL_STREAM_READ);
+        GL15.glBufferData(GL21.GL_PIXEL_PACK_BUFFER, 50331648, GL15.GL_STREAM_READ);
         GL15.glBindBuffer(GL21.GL_PIXEL_PACK_BUFFER, 0);
 
         Thread projectorThread = new Thread(() -> {
@@ -168,6 +165,9 @@ public class EyeProjector {
                 GL11.glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
                 GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 
+                fbWidth = MinecraftClient.getInstance().getWindow().getFramebufferWidth();
+                fbHeight = MinecraftClient.getInstance().getWindow().getFramebufferHeight();
+
                 GL15.glBindBuffer(GL21.GL_PIXEL_UNPACK_BUFFER, pboId);
                 GL11.glBindTexture(GL11.GL_TEXTURE_2D, projectorTextureId);
                 GL11.glTexSubImage2D(GL11.GL_TEXTURE_2D, 0, 0, 0, fbWidth, fbHeight, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, 0L);
@@ -199,7 +199,6 @@ public class EyeProjector {
                     GL11.glTexCoord2f(rightXCoords, 0.0f); GL11.glVertex2f(768.0f, 0.0f);
                     GL11.glTexCoord2f(rightXCoords, 1.0f); GL11.glVertex2f(768.0f, 768.0f);
                     GL11.glTexCoord2f(leftXCoords, 1.0f); GL11.glVertex2f(0.0f, 768.0f);
-                GL11.glEnd();
                 GL11.glEnd();
                 GL11.glPopMatrix();
 
