@@ -180,7 +180,7 @@ public class EyeProjector {
                     GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA, fbWidth, fbHeight, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, (ByteBuffer) null);
                 }
 
-                GL11.glTexSubImage2D(GL11.GL_TEXTURE_2D, 0, 0, 0, currentFbWidth, currentFbHeight, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, 0L);
+                GL11.glTexSubImage2D(GL11.GL_TEXTURE_2D, 0, 0, 0, fbWidth, fbHeight, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, 0L);
                 GL15.glBindBuffer(GL21.GL_PIXEL_UNPACK_BUFFER, 0);
 
                 GL11.glViewport(0, 0, 384 * screenScale, 384 * screenScale);
@@ -199,8 +199,8 @@ public class EyeProjector {
                 GL11.glScalef(1.0f, (float) scaleY, 1.0f);
                 GL11.glTranslatef(-384.0f, -384.0f, 0.0f);
 
-                float leftXCoords = ((fbWidth / 2) - 30) / fbWidth;
-                float rightXCoords = ((fbWidth / 2) + 30) / fbWidth;
+                float leftXCoords = (((float) fbWidth / 2.0f) - 30.0f) / (float) fbWidth;
+                float rightXCoords = (((float) fbWidth / 2.0f) + 30.0f) / (float) fbWidth;
 
                 GL11.glEnable(GL11.GL_TEXTURE_2D);
                 GL11.glBindTexture(GL11.GL_TEXTURE_2D, projectorTextureId);
